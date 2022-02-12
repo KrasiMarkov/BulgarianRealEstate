@@ -1,4 +1,5 @@
 using BulgarianRealEstate.Data;
+using BulgarianRealEstate.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,7 +25,7 @@ namespace BulgarianRealEstate
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options
+            services.AddDbContext<RealEstateDbContext>(options => options
             .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -37,7 +38,7 @@ namespace BulgarianRealEstate
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<RealEstateDbContext>();
 
             services.AddControllersWithViews();
         }
@@ -45,6 +46,8 @@ namespace BulgarianRealEstate
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.PrepareDatabase();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -1,31 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BulgarianRealEstate.Views.RealEstates
+namespace BulgarianRealEstate.Models.Properties
 {
     public class AddPropertyFormModel
-    {
-        public int Id { get; set; }
+    { 
+        public int? Size { get; init; }
 
-        public int Size { get; set; }
+        public int? Floor { get; init; }
 
-        public int Floor { get; set; }
+        [Display(Name = "Total number of floor")]
+        public int? TotalNumberOfFloor { get; init; }
 
-        public int TotalNumberOfFloor { get; set; }
+        public int? Year { get; init; }
 
-        public int Year { get; set; }
+        [Display(Name = "District")]
+        public int DistrictId { get; init; }
 
-        public int DistrictId { get; set; }
+        [Display(Name = "Property type")]
+        public int PropertyTypeId { get; init; }
 
-        public int PropertyTypeId { get; set; }
+        [Display(Name = "Building type")]
+        public int BuildingTypeId { get; init; }
 
-        public int BuildingTypeId { get; set; }
+        public int? Price { get; init; }
 
-        public int Price { get; set; }
+        public string Description { get; init; }
 
-        public string Description { get; set; }
+        public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; set; }
+
+        public IEnumerable<DistrictViewModel> Districts { get; set; }
+
+        public IEnumerable<BuildingTypeViewModel> BuildingTypes { get; set; }
+
+        
 
     }
 }

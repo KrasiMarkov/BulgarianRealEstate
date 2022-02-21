@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using static BulgarianRealEstate.Data.DataConstants;
 
 namespace BulgarianRealEstate.Data.Models
 {
@@ -10,12 +11,16 @@ namespace BulgarianRealEstate.Data.Models
     {
         public int Id { get; set; }
 
+        [Range(SizeMinValue, SizeMaxValue)]
         public int Size { get; set; }
 
+        [Range(FloorMinValue, FloorMaxValue)]
         public int Floor { get; set; }
 
+        [Range(TotalNumberOfFloorMinValue, TotalNumberOfFloorMaxValue)]
         public int TotalNumberOfFloor { get; set; }
 
+        [Range(YearMinValue, YearMaxValue)]
         public int Year { get; set; }
 
         public int DistrictId { get; set; }
@@ -30,9 +35,11 @@ namespace BulgarianRealEstate.Data.Models
 
         public BuildingType BuildingType { get; set; }
 
+        [Range(PriceMinValue, PriceMaxValue)]
         public int Price { get; set; }
 
         [Required]
+        [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; }
 
     }

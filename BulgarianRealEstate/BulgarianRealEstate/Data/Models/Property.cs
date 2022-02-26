@@ -42,5 +42,7 @@ namespace BulgarianRealEstate.Data.Models
         [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; }
 
+        public IEnumerable<PropertyImageUrl> PropertyImageUrls { get; set; } = new List<PropertyImageUrl>();
+
     }
 }

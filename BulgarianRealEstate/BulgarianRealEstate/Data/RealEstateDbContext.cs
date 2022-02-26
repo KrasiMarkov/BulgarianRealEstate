@@ -22,6 +22,10 @@ namespace BulgarianRealEstate.Data
 
         public DbSet<District> Districts { get; set; }
 
+        public DbSet<ImageUrl> ImageUrls { get; set; }
+
+        public DbSet<PropertyImageUrl> PropertyImageUrls { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -46,6 +50,12 @@ namespace BulgarianRealEstate.Data
                  .WithMany(p => p.Properties)
                  .HasForeignKey(p => p.PropertyTypeId)
                  .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<PropertyImageUrl>(e =>
+                {
+                    e.HasKey(k => new { k.PropertyId, k.ImageUrlId });
+                });
 
             base.OnModelCreating(builder);
         }

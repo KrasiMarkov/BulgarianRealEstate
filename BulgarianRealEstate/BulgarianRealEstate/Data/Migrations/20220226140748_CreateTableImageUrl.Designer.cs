@@ -4,14 +4,16 @@ using BulgarianRealEstate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BulgarianRealEstate.Data.Migrations
 {
     [DbContext(typeof(RealEstateDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220226140748_CreateTableImageUrl")]
+    partial class CreateTableImageUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,21 +116,6 @@ namespace BulgarianRealEstate.Data.Migrations
                     b.HasIndex("PropertyTypeId");
 
                     b.ToTable("Properties");
-                });
-
-            modelBuilder.Entity("BulgarianRealEstate.Data.Models.PropertyImageUrl", b =>
-                {
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ImageUrlId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PropertyId", "ImageUrlId");
-
-                    b.HasIndex("ImageUrlId");
-
-                    b.ToTable("PropertyImageUrls");
                 });
 
             modelBuilder.Entity("BulgarianRealEstate.Data.Models.PropertyType", b =>
@@ -375,25 +362,6 @@ namespace BulgarianRealEstate.Data.Migrations
                     b.Navigation("PropertyType");
                 });
 
-            modelBuilder.Entity("BulgarianRealEstate.Data.Models.PropertyImageUrl", b =>
-                {
-                    b.HasOne("BulgarianRealEstate.Data.Models.ImageUrl", "ImageUrl")
-                        .WithMany("PropertyImageUrls")
-                        .HasForeignKey("ImageUrlId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BulgarianRealEstate.Data.Models.Property", "Property")
-                        .WithMany("PropertyImageUrls")
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ImageUrl");
-
-                    b.Navigation("Property");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -453,16 +421,6 @@ namespace BulgarianRealEstate.Data.Migrations
             modelBuilder.Entity("BulgarianRealEstate.Data.Models.District", b =>
                 {
                     b.Navigation("Properties");
-                });
-
-            modelBuilder.Entity("BulgarianRealEstate.Data.Models.ImageUrl", b =>
-                {
-                    b.Navigation("PropertyImageUrls");
-                });
-
-            modelBuilder.Entity("BulgarianRealEstate.Data.Models.Property", b =>
-                {
-                    b.Navigation("PropertyImageUrls");
                 });
 
             modelBuilder.Entity("BulgarianRealEstate.Data.Models.PropertyType", b =>

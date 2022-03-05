@@ -22,9 +22,9 @@ namespace BulgarianRealEstate.Data
 
         public DbSet<District> Districts { get; set; }
 
-        public DbSet<ImageUrl> ImageUrls { get; set; }
+        public DbSet<Image> Images { get; set; }
 
-        public DbSet<PropertyImageUrl> PropertyImageUrls { get; set; }
+        public DbSet<PropertyImage> PropertyImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -52,9 +52,9 @@ namespace BulgarianRealEstate.Data
                  .OnDelete(DeleteBehavior.Restrict);
 
             builder
-                .Entity<PropertyImageUrl>(e =>
+                .Entity<PropertyImage>(e =>
                 {
-                    e.HasKey(k => new { k.PropertyId, k.ImageUrlId });
+                    e.HasKey(k => new { k.PropertyId, k.ImageId });
                 });
 
             base.OnModelCreating(builder);

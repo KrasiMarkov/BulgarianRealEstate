@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace BulgarianRealEstate.Data.Models
 {
-    public class ImageUrl
+    public class Image
     {
         public int Id { get; set; }
 
         [Required]
-        public string Url { get; set; }
+        public byte[] Content { get; set; }
 
-        public IEnumerable<PropertyImageUrl> PropertyImageUrls { get; set; } = new List<PropertyImageUrl>();
+        public ICollection<PropertyImage> PropertyImages { get; set; } = new List<PropertyImage>();
 
     }
 }

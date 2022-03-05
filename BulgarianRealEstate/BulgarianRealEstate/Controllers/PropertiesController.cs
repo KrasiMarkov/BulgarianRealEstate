@@ -1,9 +1,11 @@
 ﻿using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
 using BulgarianRealEstate.Models.Properties;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,11 +31,16 @@ namespace BulgarianRealEstate.Controllers
         });
 
         [HttpPost]
-        public IActionResult Add(AddPropertyFormModel property)
+        public IActionResult Add(AddPropertyFormModel property, List<IFormFile> images)
         {
             if (!this.data.PropertyTypes.Any(p => p.Id == property.PropertyTypeId)) 
             {
                 this.ModelState.AddModelError(nameof(property.PropertyTypeId), "The category does not exist");
+            }
+
+            if (images == null || images.Any(x => x.Length > 2 * 1024 * 1024))
+            {
+                this.ModelState.AddModelError("Image", "The image is not valid. It is required and it should be less than 2 MB.");
             }
 
             if (!ModelState.IsValid) 
@@ -58,6 +65,33 @@ namespace BulgarianRealEstate.Controllers
                 Description = property.Description
 
             };
+
+
+            foreach (var image in images)
+            {
+                var imageInMemory = new MemoryStream();
+                image.CopyTo(imageInMemory);
+                var imageBytes = imageInMemory.ToArray();
+
+                var imageData = new Image
+                {
+                    Content = imageBytes
+                };
+
+                this.data.Images.Add(imageData);
+                this.data.SaveChanges();
+
+
+                propertyData.PropertyImages.Add(new PropertyImage
+                {
+                    ImageId = imageData.Id
+                });
+            }
+
+            
+            
+            
+
 
             this.data.Properties.Add(propertyData);
             this.data.SaveChanges();

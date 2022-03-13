@@ -21,6 +21,32 @@ namespace BulgarianRealEstate.Controllers
         }
 
 
+        public IActionResult All() 
+        {
+            var allProperties = this.data
+                                    .Properties
+                                    .Select(x => new AllPropertyViewModel
+                                    {
+
+                                        Size = x.Size,
+                                        Floor = x.Floor,
+                                        TotalNumberOfFloor = x.TotalNumberOfFloor,
+                                        Year = x.Year,
+                                        District = x.District.Name,
+                                        PropertyType = x.PropertyType.Name,
+                                        BuildingType = x.BuildingType.Name,
+                                        Price = x.Price,
+                                        Description = x.Description,
+                                        Images = x.PropertyImages
+                                                                .Select(i => i.Image.Content)
+                                                                .ToList()
+
+                                    }).ToList();
+
+            return View(allProperties);
+
+        }
+
 
         public IActionResult Add() => View(new AddPropertyFormModel
         {
@@ -128,5 +154,7 @@ namespace BulgarianRealEstate.Controllers
                    Name = p.Name
                })
                .ToList();
+
+       
     }
 }

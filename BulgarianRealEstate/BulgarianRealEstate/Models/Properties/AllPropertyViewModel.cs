@@ -7,6 +7,7 @@ namespace BulgarianRealEstate.Models.Properties
 {
     public class AllPropertyViewModel
     {
+        public int Id { get; init; }
         public int Size { get; init; }
 
         public int Floor { get; init; }

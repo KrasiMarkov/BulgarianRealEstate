@@ -1,21 +1,26 @@
 ﻿@model List<AllPropertyViewModel>
 
-@foreach (var item in Model)
-{
-   <div class="card" style="width: 18rem;">
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
 
-     @{
-            var base64 = Convert.ToBase64String(item.Images[0]);
-            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-     }
+           <div class="card mb-3">
 
-      <img class="card-img-top" src="@imgSrc" alt="">
-      <div class="card-body">
-          <h5 class="card-title">@item.Price EUR</h5>
-          <p class="card-text">@item.PropertyType</p>
-          <p class="card-text">@item.District</p>
-          <p class="card-text">@item.Description</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-   </div>
-}
+             @{
+                var base64 = Convert.ToBase64String(item.Images[0]);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+             }
+
+             <img class="card-img-top" src="@imgSrc">
+             <div class="card-body text-center">
+                <h5 class="card-title text-center">@item.Price EUR</h5>
+                <p class="card-text">@item.PropertyType</p>
+                <p class="card-text">@item.District</p>
+                <p class="card-text">@item.Description</p>
+                <a asp-controller="Properties" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">View More</a>
+             </div>
+           </div>
+        </div>
+    }
+</div>

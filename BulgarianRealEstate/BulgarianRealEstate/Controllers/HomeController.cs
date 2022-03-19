@@ -1,5 +1,6 @@
 ﻿using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Models;
+using BulgarianRealEstate.Models.Home;
 using BulgarianRealEstate.Models.Properties;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,29 +23,36 @@ namespace BulgarianRealEstate.Controllers
         }
         public IActionResult Index() 
         {
+            var totalUsers = this.data
+                                 .Users
+                                 .Count();
+
+            var totalProperties = this.data
+                                      .Properties
+                                      .Count();
 
             var allProperties = this.data
                                    .Properties
-                                   .Select(x => new AllPropertyViewModel
+                                   .OrderByDescending(p => p.Id)
+                                   .Select(x => new PropertyIndexViewModel
                                    {
-
-                                       Size = x.Size,
-                                       Floor = x.Floor,
-                                       TotalNumberOfFloor = x.TotalNumberOfFloor,
-                                       Year = x.Year,
                                        District = x.District.Name,
                                        PropertyType = x.PropertyType.Name,
-                                       BuildingType = x.BuildingType.Name,
                                        Price = x.Price,
-                                       Description = x.Description,
                                        Images = x.PropertyImages
                                                                .Select(i => i.Image.Content)
                                                                .ToList()
-
+                                    
                                    })
+                                   .Take(3)
                                    .ToList();
 
-            return View(allProperties);
+            return View( new IndexViewModel 
+            {
+                TotalProperties = totalProperties,
+                TotalUsers = totalUsers,
+                Properties = allProperties
+            });
 
 
         }

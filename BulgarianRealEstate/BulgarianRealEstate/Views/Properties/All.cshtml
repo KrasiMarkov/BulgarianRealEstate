@@ -1,7 +1,17 @@
-﻿@model List<AllPropertyViewModel>
+﻿@model AllPropertyQueryModel
+
+
+<form method="get">
+     <div class="row mb-5">
+         <div class="form-group col-md-3">
+              <label asp-for="SearchTerm"></label>
+              <input asp-for="SearchTerm" class="form-control">
+         </div>
+     </div>
+</form>
 
 <div class="row">
-    @foreach (var item in Model)
+    @foreach (var item in Model.Properties)
     {
         <div class="col-md-4">
 

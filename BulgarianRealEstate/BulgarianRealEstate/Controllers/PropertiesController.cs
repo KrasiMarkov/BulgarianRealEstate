@@ -21,11 +21,23 @@ namespace BulgarianRealEstate.Controllers
         }
 
 
-        public IActionResult All() 
+        public IActionResult All(string searchTerm) 
         {
-            var allProperties = this.data
-                                    .Properties
-                                    .Select(x => new AllPropertyViewModel
+
+            var propertiesQuery = this.data.Properties.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm)) 
+            {
+                propertiesQuery = propertiesQuery.Where(p =>
+                p.Description.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+
+
+
+            var properties = propertiesQuery
+                                    .OrderByDescending(p => p.Id)
+                                    .Select(x => new PropertyListingViewModel
                                     {
 
                                         Size = x.Size,
@@ -43,7 +55,11 @@ namespace BulgarianRealEstate.Controllers
 
                                     }).ToList();
 
-            return View(allProperties);
+            return View(new AllPropertyQueryModel
+            {
+                SearchTerm = searchTerm,
+                Properties = properties
+            });
 
         }
 

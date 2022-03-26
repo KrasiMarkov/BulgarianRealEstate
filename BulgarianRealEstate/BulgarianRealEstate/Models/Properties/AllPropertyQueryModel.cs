@@ -8,8 +8,10 @@ namespace BulgarianRealEstate.Models.Properties
 {
     public class AllPropertyQueryModel
     {
-        [Display(Name = "Search by text")]
-        public string SearchTerm { get; init; }
+       
+        public string Keyword { get; init; }
+
+        public string Location { get; init; }
         public List<PropertyListingViewModel> Properties { get; init; }
     }
 }

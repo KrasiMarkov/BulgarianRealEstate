@@ -21,18 +21,22 @@ namespace BulgarianRealEstate.Controllers
         }
 
 
-        public IActionResult All(string searchTerm) 
+        public IActionResult All(string keyword, string location) 
         {
 
             var propertiesQuery = this.data.Properties.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm)) 
+            if (!string.IsNullOrWhiteSpace(keyword)) 
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Description.ToLower().Contains(searchTerm.ToLower()));
+                p.Description.ToLower().Contains(keyword.ToLower()));
             }
 
-
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                propertiesQuery = propertiesQuery.Where(p =>
+                p.District.Name.ToLower().Contains(location.ToLower()));
+            }
 
 
             var properties = propertiesQuery
@@ -57,7 +61,8 @@ namespace BulgarianRealEstate.Controllers
 
             return View(new AllPropertyQueryModel
             {
-                SearchTerm = searchTerm,
+                Keyword = keyword,
+                Location = location,
                 Properties = properties
             });
 

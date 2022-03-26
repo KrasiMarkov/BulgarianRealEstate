@@ -12,6 +12,11 @@ namespace BulgarianRealEstate.Models.Properties
         public string Keyword { get; init; }
 
         public string Location { get; init; }
+
+        [Display(Name = "BuildingType")]
+        public int BuildingTypeId { get; init; }
         public List<PropertyListingViewModel> Properties { get; init; }
+
+        public IEnumerable<BuildingTypeViewModel> BuildingTypes { get; set; }
     }
 }

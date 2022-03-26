@@ -26,6 +26,18 @@
             }
         </select>
     </div>
+    <div class="form-group">
+        <label asp-for="PropertyTypeId"></label>
+        <select asp-for="PropertyTypeId" class="form-control">
+            <option value="">All</option>
+
+            @foreach (var propertyType in Model.PropertyTypes)
+            {
+                <option value="@propertyType.Id">@propertyType.Name</option>
+
+            }
+        </select>
+    </div>
 
     <div class="form-group">
         <input class="btn btn-primary" type="submit" value="Search Property" />

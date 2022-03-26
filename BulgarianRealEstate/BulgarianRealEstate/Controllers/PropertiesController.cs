@@ -21,7 +21,7 @@ namespace BulgarianRealEstate.Controllers
         }
 
 
-        public IActionResult All(string keyword, string location, int buildingTypeId) 
+        public IActionResult All(string keyword, string location, int buildingTypeId, int propertyTypeId) 
         {
 
             var propertiesQuery = this.data.Properties.AsQueryable();
@@ -42,6 +42,12 @@ namespace BulgarianRealEstate.Controllers
             {
                 propertiesQuery = propertiesQuery.Where(p =>
                 p.BuildingTypeId == buildingTypeId);
+            }
+
+            if (propertyTypeId != 0)
+            {
+                propertiesQuery = propertiesQuery.Where(p =>
+                p.PropertyTypeId == propertyTypeId);
             }
 
 
@@ -70,7 +76,8 @@ namespace BulgarianRealEstate.Controllers
                 Keyword = keyword,
                 Location = location,
                 Properties = properties,
-                BuildingTypes = this.GetBuildingTypes()
+                BuildingTypes = this.GetBuildingTypes(),
+                PropertyTypes = this.GetPropertyTypes()
             });
 
         }

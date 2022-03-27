@@ -21,7 +21,7 @@ namespace BulgarianRealEstate.Controllers
         }
 
 
-        public IActionResult All(string keyword, string location, int buildingTypeId, int propertyTypeId) 
+        public IActionResult All(string keyword, int districtId, int buildingTypeId, int propertyTypeId) 
         {
 
             var propertiesQuery = this.data.Properties.AsQueryable();
@@ -32,10 +32,10 @@ namespace BulgarianRealEstate.Controllers
                 p.Description.ToLower().Contains(keyword.ToLower()));
             }
 
-            if (!string.IsNullOrWhiteSpace(location))
+            if (districtId != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.District.Name.ToLower().Contains(location.ToLower()));
+                p.DistrictId == districtId);
             }
 
             if (buildingTypeId != 0)
@@ -74,10 +74,10 @@ namespace BulgarianRealEstate.Controllers
             return View(new AllPropertyQueryModel
             {
                 Keyword = keyword,
-                Location = location,
                 Properties = properties,
                 BuildingTypes = this.GetBuildingTypes(),
-                PropertyTypes = this.GetPropertyTypes()
+                PropertyTypes = this.GetPropertyTypes(),
+                Districts = this.GetDistricts()
             });
 
         }

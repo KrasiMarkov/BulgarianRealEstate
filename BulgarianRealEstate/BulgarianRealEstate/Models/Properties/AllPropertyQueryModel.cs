@@ -14,6 +14,9 @@ namespace BulgarianRealEstate.Models.Properties
         [Display(Name = "Min Price")]
         public string MinPrice { get; set; }
 
+        [Display(Name = "Max Price")]
+        public string MaxPrice { get; set; }
+
         [Display(Name = "Building Type")]
         public int BuildingTypeId { get; init; }
 

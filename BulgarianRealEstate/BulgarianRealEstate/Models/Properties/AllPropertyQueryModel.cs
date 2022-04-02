@@ -11,6 +11,9 @@ namespace BulgarianRealEstate.Models.Properties
        
         public string Keyword { get; init; }
 
+        [Display(Name = "Min Year")]
+        public string MinYear { get; set; }
+
         [Display(Name = "Min Size")]
         public string MinSize { get; set; }
 

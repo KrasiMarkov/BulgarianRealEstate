@@ -22,7 +22,7 @@ namespace BulgarianRealEstate.Controllers
 
 
         public IActionResult All(string keyword, int districtId, int buildingTypeId, int propertyTypeId,
-           int minPrice, int maxPrice, int minSize, int maxSize, int minYear) 
+           int minPrice, int maxPrice, int minSize, int maxSize, int minYear, int maxYear) 
         {
 
             var propertiesQuery = this.data.Properties.AsQueryable();
@@ -79,6 +79,12 @@ namespace BulgarianRealEstate.Controllers
             {
                 propertiesQuery = propertiesQuery.Where(p =>
                 p.Year >= minYear);
+            }
+
+            if (maxYear != 0)
+            {
+                propertiesQuery = propertiesQuery.Where(p =>
+                p.Year <= maxYear);
             }
 
             var properties = propertiesQuery

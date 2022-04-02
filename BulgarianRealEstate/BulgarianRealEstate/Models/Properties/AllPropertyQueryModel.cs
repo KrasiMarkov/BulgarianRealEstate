@@ -14,6 +14,9 @@ namespace BulgarianRealEstate.Models.Properties
         [Display(Name = "Min Year")]
         public string MinYear { get; set; }
 
+        [Display(Name = "Max Year")]
+        public string MaxYear { get; set; }
+
         [Display(Name = "Min Size")]
         public string MinSize { get; set; }
 

@@ -14,6 +14,9 @@ namespace BulgarianRealEstate.Models.Properties
         [Display(Name = "Min Floor")]
         public string MinFloor { get; set; }
 
+        [Display(Name = "Max Floor")]
+        public string MaxFloor { get; set; }
+
         [Display(Name = "Min Year")]
         public string MinYear { get; set; }
 

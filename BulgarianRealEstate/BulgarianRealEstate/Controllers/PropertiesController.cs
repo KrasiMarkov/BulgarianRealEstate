@@ -21,82 +21,81 @@ namespace BulgarianRealEstate.Controllers
         }
 
 
-        public IActionResult All(string keyword, int districtId, int buildingTypeId, int propertyTypeId,
-           int minPrice, int maxPrice, int minSize, int maxSize, int minYear, int maxYear, int minFloor, int maxFloor) 
+        public IActionResult All([FromQuery] AllPropertyQueryModel query) 
         {
 
             var propertiesQuery = this.data.Properties.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(keyword)) 
+            if (!string.IsNullOrWhiteSpace(query.Keyword)) 
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Description.ToLower().Contains(keyword.ToLower()));
+                p.Description.ToLower().Contains(query.Keyword.ToLower()));
             }
 
-            if (districtId != 0)
+            if (query.DistrictId != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.DistrictId == districtId);
+                p.DistrictId == query.DistrictId);
             }
 
-            if (buildingTypeId != 0)
+            if (query.BuildingTypeId != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.BuildingTypeId == buildingTypeId);
+                p.BuildingTypeId == query.BuildingTypeId);
             }
 
-            if (propertyTypeId != 0)
+            if (query.PropertyTypeId != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.PropertyTypeId == propertyTypeId);
+                p.PropertyTypeId == query.PropertyTypeId);
             }
 
-            if (minPrice != 0)
+            if (query.MinPrice != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Price >= minPrice );
+                p.Price >= query.MinPrice);
             }
 
-            if (maxPrice != 0)
+            if (query.MaxPrice != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Price <= maxPrice);
+                p.Price <= query.MaxPrice);
             }
 
-            if (minSize != 0)
+            if (query.MinSize != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Size >= minSize);
+                p.Size >= query.MinSize);
             }
 
-            if (maxSize != 0)
+            if (query.MaxSize != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Size <= maxSize);
+                p.Size <= query.MaxSize);
             }
 
-            if (minYear != 0)
+            if (query.MinYear != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Year >= minYear);
+                p.Year >= query.MinYear);
             }
 
-            if (maxYear != 0)
+            if (query.MaxYear != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Year <= maxYear);
+                p.Year <= query.MaxYear);
             }
 
-            if (minFloor != 0)
+            if (query.MinFloor != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Floor >= minFloor);
+                p.Floor >= query.MinFloor);
             }
 
-            if (maxFloor != 0)
+            if (query.MaxFloor != 0)
             {
                 propertiesQuery = propertiesQuery.Where(p =>
-                p.Floor <= maxFloor);
+                p.Floor <= query.MaxFloor);
             }
 
             var properties = propertiesQuery
@@ -119,14 +118,13 @@ namespace BulgarianRealEstate.Controllers
 
                                     }).ToList();
 
-            return View(new AllPropertyQueryModel
-            {
-                Keyword = keyword,
-                Properties = properties,
-                BuildingTypes = this.GetBuildingTypes(),
-                PropertyTypes = this.GetPropertyTypes(),
-                Districts = this.GetDistricts()
-            });
+
+                query.Properties = properties;
+                query.BuildingTypes = this.GetBuildingTypes();
+                query.PropertyTypes = this.GetPropertyTypes();
+                query.Districts = this.GetDistricts();
+
+            return View(query);
 
         }
 

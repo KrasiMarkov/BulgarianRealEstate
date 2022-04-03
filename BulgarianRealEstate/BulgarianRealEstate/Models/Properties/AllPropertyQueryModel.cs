@@ -12,28 +12,28 @@ namespace BulgarianRealEstate.Models.Properties
         public string Keyword { get; init; }
 
         [Display(Name = "Min Floor")]
-        public string MinFloor { get; set; }
+        public int MinFloor { get; set; }
 
         [Display(Name = "Max Floor")]
-        public string MaxFloor { get; set; }
+        public int MaxFloor { get; set; }
 
         [Display(Name = "Min Year")]
-        public string MinYear { get; set; }
+        public int MinYear { get; set; }
 
         [Display(Name = "Max Year")]
-        public string MaxYear { get; set; }
+        public int MaxYear { get; set; }
 
         [Display(Name = "Min Size")]
-        public string MinSize { get; set; }
+        public int MinSize { get; set; }
 
         [Display(Name = "Max Size")]
-        public string MaxSize { get; set; }
+        public int MaxSize { get; set; }
 
         [Display(Name = "Min Price")]
-        public string MinPrice { get; set; }
+        public int MinPrice { get; set; }
 
         [Display(Name = "Max Price")]
-        public string MaxPrice { get; set; }
+        public int MaxPrice { get; set; }
 
         [Display(Name = "Building Type")]
         public int BuildingTypeId { get; init; }
@@ -43,7 +43,7 @@ namespace BulgarianRealEstate.Models.Properties
 
         [Display(Name = "Location")]
         public int DistrictId { get; init; }
-        public List<PropertyListingViewModel> Properties { get; init; }
+        public List<PropertyListingViewModel> Properties { get; set; }
 
         public IEnumerable<BuildingTypeViewModel> BuildingTypes { get; set; }
 

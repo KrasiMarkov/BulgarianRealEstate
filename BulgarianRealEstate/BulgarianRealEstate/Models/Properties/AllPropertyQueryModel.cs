@@ -43,6 +43,13 @@ namespace BulgarianRealEstate.Models.Properties
 
         [Display(Name = "Location")]
         public int DistrictId { get; init; }
+
+        public const int PropertiesPerPage = 2;
+
+        public int CurrentPage { get; set; } = 1;
+
+        public int TotalProperties { get; set; }
+
         public List<PropertyListingViewModel> Properties { get; set; }
 
         public IEnumerable<BuildingTypeViewModel> BuildingTypes { get; set; }

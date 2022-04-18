@@ -98,8 +98,12 @@ namespace BulgarianRealEstate.Controllers
                 p.Floor <= query.MaxFloor);
             }
 
+            var totalProperties = this.data.Properties.Count();
+
             var properties = propertiesQuery
                                     .OrderByDescending(p => p.Id)
+                                    .Skip((query.CurrentPage - 1) * AllPropertyQueryModel.PropertiesPerPage)
+                                    .Take(AllPropertyQueryModel.PropertiesPerPage)
                                     .Select(x => new PropertyListingViewModel
                                     {
 
@@ -120,6 +124,7 @@ namespace BulgarianRealEstate.Controllers
 
 
                 query.Properties = properties;
+                query.TotalProperties = totalProperties;
                 query.BuildingTypes = this.GetBuildingTypes();
                 query.PropertyTypes = this.GetPropertyTypes();
                 query.Districts = this.GetDistricts();

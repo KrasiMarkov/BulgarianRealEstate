@@ -127,10 +127,40 @@
 
 <div class="row">
     <div class="col-md-6">
-        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)" asp-controller="Properties" asp-action="All" asp-route-currentPage="@previousPage"><<</a>
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)" 
+           asp-controller="Properties" 
+           asp-action="All" 
+           asp-route-currentPage="@previousPage"
+           asp-route-keyword="@Model.Keyword"
+           asp-route-location="@Model.DistrictId"
+           asp-route-buildingType="@Model.BuildingTypeId"
+           asp-route-propertyType="@Model.PropertyTypeId"
+           asp-route-minPrice="@Model.MinPrice"
+           asp-route-maxPrice="@Model.MaxPrice"
+           asp-route-minSize="@Model.MinSize"
+           asp-route-maxSize="@Model.MaxSize"
+           asp-route-minYear="@Model.MinYear"
+           asp-route-maxYear="@Model.MaxYear"
+           asp-route-minFloor="@Model.MinFloor"
+           asp-route-maxFloor="@Model.MaxFloor"><<</a>
     </div>
     <div class="col-md-6">
-        <a class="btn btn-primary float-right @(Model.CurrentPage == maxPage ? "disabled" : string.Empty)" asp-controller="Properties" asp-action="All" asp-route-currentPage="@(Model.CurrentPage + 1)">>></a>
+        <a class="btn btn-primary float-right @(Model.CurrentPage == maxPage ? "disabled" : string.Empty)" 
+           asp-controller="Properties" 
+           asp-action="All" 
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-keyword="@Model.Keyword"
+           asp-route-location="@Model.DistrictId"
+           asp-route-buildingType="@Model.BuildingTypeId"
+           asp-route-propertyType="@Model.PropertyTypeId"
+           asp-route-minPrice="@Model.MinPrice"
+           asp-route-maxPrice="@Model.MaxPrice"
+           asp-route-minSize="@Model.MinSize"
+           asp-route-maxSize="@Model.MaxSize"
+           asp-route-minYear="@Model.MinYear"
+           asp-route-maxYear="@Model.MaxYear"
+           asp-route-minFloor="@Model.MinFloor"
+           asp-route-maxFloor="@Model.MaxFloor">>></a>
     </div>
 </div>
 

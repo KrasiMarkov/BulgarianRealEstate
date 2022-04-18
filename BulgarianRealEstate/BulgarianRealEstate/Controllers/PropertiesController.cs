@@ -98,7 +98,7 @@ namespace BulgarianRealEstate.Controllers
                 p.Floor <= query.MaxFloor);
             }
 
-            var totalProperties = this.data.Properties.Count();
+            var totalProperties = propertiesQuery.Count();
 
             var properties = propertiesQuery
                                     .OrderByDescending(p => p.Id)

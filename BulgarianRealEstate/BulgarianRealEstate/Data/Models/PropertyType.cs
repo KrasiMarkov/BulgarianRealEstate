@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static BulgarianRealEstate.Data.DataConstants;
+using static BulgarianRealEstate.Data.DataConstants.PropertyType;
 
 
 namespace BulgarianRealEstate.Data.Models
@@ -13,7 +13,7 @@ namespace BulgarianRealEstate.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(PropertyTypeNameMaxLength)]
+        [MaxLength(NameMaxLength)]
         public string Name { get; set; }
 
 

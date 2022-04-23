@@ -1,4 +1,5 @@
 using BulgarianRealEstate.Data;
+using BulgarianRealEstate.Data.Models;
 using BulgarianRealEstate.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

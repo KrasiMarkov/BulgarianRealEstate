@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BulgarianRealEstate.Data.Migrations
 {
     [DbContext(typeof(RealEstateDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    partial class RealEstateDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,35 @@ namespace BulgarianRealEstate.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BuildingTypes");
+                });
+
+            modelBuilder.Entity("BulgarianRealEstate.Data.Models.Dealer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Dealers");
                 });
 
             modelBuilder.Entity("BulgarianRealEstate.Data.Models.District", b =>
@@ -79,6 +108,9 @@ namespace BulgarianRealEstate.Data.Migrations
                     b.Property<int>("BuildingTypeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DealerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(2000)
@@ -108,6 +140,8 @@ namespace BulgarianRealEstate.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingTypeId");
+
+                    b.HasIndex("DealerId");
 
                     b.HasIndex("DistrictId");
 
@@ -348,11 +382,26 @@ namespace BulgarianRealEstate.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BulgarianRealEstate.Data.Models.Dealer", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithOne()
+                        .HasForeignKey("BulgarianRealEstate.Data.Models.Dealer", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BulgarianRealEstate.Data.Models.Property", b =>
                 {
                     b.HasOne("BulgarianRealEstate.Data.Models.BuildingType", "BuildingType")
                         .WithMany("Properties")
                         .HasForeignKey("BuildingTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BulgarianRealEstate.Data.Models.Dealer", "Dealer")
+                        .WithMany("Properties")
+                        .HasForeignKey("DealerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -369,6 +418,8 @@ namespace BulgarianRealEstate.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("BuildingType");
+
+                    b.Navigation("Dealer");
 
                     b.Navigation("District");
 
@@ -446,6 +497,11 @@ namespace BulgarianRealEstate.Data.Migrations
                 });
 
             modelBuilder.Entity("BulgarianRealEstate.Data.Models.BuildingType", b =>
+                {
+                    b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("BulgarianRealEstate.Data.Models.Dealer", b =>
                 {
                     b.Navigation("Properties");
                 });

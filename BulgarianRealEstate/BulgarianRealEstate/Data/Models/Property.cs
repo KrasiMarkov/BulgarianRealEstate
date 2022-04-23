@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static BulgarianRealEstate.Data.DataConstants;
+using static BulgarianRealEstate.Data.DataConstants.Property;
 
 namespace BulgarianRealEstate.Data.Models
 {
@@ -35,6 +35,11 @@ namespace BulgarianRealEstate.Data.Models
 
         public BuildingType BuildingType { get; set; }
 
+        public int DealerId { get; set; }
+
+        public Dealer Dealer { get; set; }
+
+     
         [Range(PriceMinValue, PriceMaxValue)]
         public int Price { get; set; }
 

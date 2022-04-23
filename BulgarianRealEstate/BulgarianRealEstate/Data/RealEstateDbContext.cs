@@ -1,4 +1,5 @@
 ﻿using BulgarianRealEstate.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,6 +13,8 @@ namespace BulgarianRealEstate.Data
         public RealEstateDbContext(DbContextOptions<RealEstateDbContext> options)
             : base(options)
         {
+
+
         }
 
         public DbSet<Property> Properties { get; set; }
@@ -25,6 +28,8 @@ namespace BulgarianRealEstate.Data
         public DbSet<Image> Images { get; set; }
 
         public DbSet<PropertyImage> PropertyImages { get; set; }
+
+        public DbSet<Dealer> Dealers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -51,11 +56,27 @@ namespace BulgarianRealEstate.Data
                  .HasForeignKey(p => p.PropertyTypeId)
                  .OnDelete(DeleteBehavior.Restrict);
 
+
             builder
                 .Entity<PropertyImage>(e =>
                 {
                     e.HasKey(k => new { k.PropertyId, k.ImageId });
                 });
+
+
+            builder
+               .Entity<Property>()
+               .HasOne(p => p.Dealer)
+               .WithMany(d => d.Properties)
+               .HasForeignKey(p => p.DealerId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+               .Entity<Dealer>()
+               .HasOne<IdentityUser>()
+               .WithOne()
+               .HasForeignKey<Dealer>(d => d.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

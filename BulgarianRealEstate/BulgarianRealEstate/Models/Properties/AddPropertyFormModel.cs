@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static BulgarianRealEstate.Data.DataConstants;
+using static BulgarianRealEstate.Data.DataConstants.Property;
 
 namespace BulgarianRealEstate.Models.Properties
 {

@@ -1,12 +1,14 @@
 ﻿using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
 using BulgarianRealEstate.Models.Properties;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BulgarianRealEstate.Controllers
@@ -25,6 +27,8 @@ namespace BulgarianRealEstate.Controllers
         {
 
             var propertiesQuery = this.data.Properties.AsQueryable();
+
+           
 
             if (!string.IsNullOrWhiteSpace(query.Keyword)) 
             {
@@ -133,18 +137,26 @@ namespace BulgarianRealEstate.Controllers
 
         }
 
-
-        public IActionResult Add() => View(new AddPropertyFormModel
+        
+        public IActionResult Add()
         {
-            
-            PropertyTypes = this.GetPropertyTypes(),
-            Districts = this.GetDistricts(),
-            BuildingTypes = this.GetBuildingTypes()
-        });
+           
 
+            return View(new AddPropertyFormModel
+            {
+
+                PropertyTypes = this.GetPropertyTypes(),
+                Districts = this.GetDistricts(),
+                BuildingTypes = this.GetBuildingTypes()
+            });
+        }
+
+        
         [HttpPost]
         public IActionResult Add(AddPropertyFormModel property, List<IFormFile> images)
         {
+            
+
             if (!this.data.PropertyTypes.Any(p => p.Id == property.PropertyTypeId)) 
             {
                 this.ModelState.AddModelError(nameof(property.PropertyTypeId), "The category does not exist");
@@ -174,8 +186,8 @@ namespace BulgarianRealEstate.Controllers
                 PropertyTypeId = property.PropertyTypeId,
                 BuildingTypeId = property.BuildingTypeId,
                 Price = property.Price,
-                Description = property.Description
-
+                Description = property.Description,
+                
             };
 
 

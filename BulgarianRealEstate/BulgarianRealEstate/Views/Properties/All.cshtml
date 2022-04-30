@@ -84,6 +84,8 @@
     </div>
 </form>
 
+
+
 <div class="mb-5"></div>
 
 <div class="row">
@@ -112,6 +114,11 @@
 </div>
 
 <div class="mb-5"></div>
+
+@if (!Model.Properties.Any())
+{
+    <h2 class="text-center">No properties found by the given criteria!</h2>
+}
 
 @{ 
     var previousPage = Model.CurrentPage - 1;

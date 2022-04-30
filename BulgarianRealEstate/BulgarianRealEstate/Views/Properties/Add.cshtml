@@ -1,12 +1,12 @@
 ﻿@model AddPropertyFormModel
 
-@{ 
-    ViewData["Title"] = "Add Property";
+@{
+    ViewBag.Title = "Add Property";
 }
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
 
-        <h2 class="heading-margin">Add Property</h2>
+        <h2 class="heading-margin">@ViewBag.Title</h2>
 
         <form method="post" enctype="multipart/form-data">
             <div class="form-group">
@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-group">
-                <input type="file" name="Images" multiple/>
+                <input type="file" name="Images" multiple />
             </div>
 
             <div class="form-group">

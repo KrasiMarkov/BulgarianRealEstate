@@ -39,7 +39,9 @@ namespace BulgarianRealEstate.Data
         }
         public class Dealer 
         {
+            public const int NameMinLength = 2;
             public const int NameMaxLength = 25;
+            public const int PhoneNumberMinLength = 6;
             public const int PhoneNumberMaxLength = 30;
         }
 

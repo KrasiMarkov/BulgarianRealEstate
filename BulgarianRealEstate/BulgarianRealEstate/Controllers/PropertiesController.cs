@@ -1,5 +1,6 @@
 ﻿using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
+using BulgarianRealEstate.Infrastructure;
 using BulgarianRealEstate.Models.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -137,10 +138,15 @@ namespace BulgarianRealEstate.Controllers
 
         }
 
-        
+        [Authorize]
         public IActionResult Add()
         {
-           
+
+            if (!this.UserIsDealer()) 
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
+    
 
             return View(new AddPropertyFormModel
             {
@@ -153,9 +159,19 @@ namespace BulgarianRealEstate.Controllers
 
         
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddPropertyFormModel property, List<IFormFile> images)
         {
-            
+            var dealerId = this.data
+                               .Dealers
+                               .Where(d => d.UserId == this.User.GetId())
+                               .Select(d => d.Id)
+                               .FirstOrDefault();
+
+            if (dealerId == 0)
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
 
             if (!this.data.PropertyTypes.Any(p => p.Id == property.PropertyTypeId)) 
             {
@@ -187,6 +203,7 @@ namespace BulgarianRealEstate.Controllers
                 BuildingTypeId = property.BuildingTypeId,
                 Price = property.Price,
                 Description = property.Description,
+                DealerId = dealerId
                 
             };
 
@@ -253,6 +270,11 @@ namespace BulgarianRealEstate.Controllers
                })
                .ToList();
 
-       
+        private bool UserIsDealer() 
+        => this.data.Dealers.Any(d => d.UserId == this.User.GetId());
+
+
+
+
     }
 }

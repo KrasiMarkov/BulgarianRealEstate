@@ -2,6 +2,7 @@
 using BulgarianRealEstate.Models;
 using BulgarianRealEstate.Models.Home;
 using BulgarianRealEstate.Models.Properties;
+using BulgarianRealEstate.Services.Statistics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,20 +17,15 @@ namespace BulgarianRealEstate.Controllers
     {
 
         private readonly RealEstateDbContext data;
+        private readonly IStatisticsService statistics;
 
-        public HomeController(RealEstateDbContext data)
+        public HomeController(IStatisticsService statistics, RealEstateDbContext data)
         {
             this.data = data;
+            this.statistics = statistics;
         }
         public IActionResult Index() 
         {
-            var totalUsers = this.data
-                                 .Users
-                                 .Count();
-
-            var totalProperties = this.data
-                                      .Properties
-                                      .Count();
 
             var allProperties = this.data
                                    .Properties
@@ -47,10 +43,12 @@ namespace BulgarianRealEstate.Controllers
                                    .Take(3)
                                    .ToList();
 
+            var totalStatistics = this.statistics.Total();
+
             return View( new IndexViewModel 
             {
-                TotalProperties = totalProperties,
-                TotalUsers = totalUsers,
+                TotalProperties = totalStatistics.TotalProperties,
+                TotalUsers = totalStatistics.TotalUsers,
                 Properties = allProperties
             });
 

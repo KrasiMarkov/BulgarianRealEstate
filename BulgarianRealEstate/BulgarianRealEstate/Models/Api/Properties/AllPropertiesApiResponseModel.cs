@@ -11,6 +11,7 @@ namespace BulgarianRealEstate.Models.Api.Properties
 
         public int TotalProperties { get; set; }
 
+        public int PropertiesPerPage { get; set; }
 
         public IEnumerable<PropertyResponseModel> Properties { get; set; }
 

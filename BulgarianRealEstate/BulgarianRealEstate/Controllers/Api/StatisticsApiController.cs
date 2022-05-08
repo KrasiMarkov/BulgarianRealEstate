@@ -1,5 +1,6 @@
 ﻿using BulgarianRealEstate.Data;
-using BulgarianRealEstate.Models.Api.Statistics;
+using BulgarianRealEstate.Models.Api;
+using BulgarianRealEstate.Services.Statistics;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,24 +13,18 @@ namespace BulgarianRealEstate.Controllers.Api
     [Route("api/statistics")]
     public class StatisticsApiController : ControllerBase
     {
-        private readonly RealEstateDbContext data;
-        public StatisticsApiController(RealEstateDbContext data)
+        private readonly IStatisticsService statistics;
+        public StatisticsApiController(IStatisticsService statistics)
         {
-            this.data = data;
+            this.statistics = statistics;
         }
 
         [HttpGet]
-        public StatisticsResponseModel GetStatistics()
+        public StatisticsServiceModel GetStatistics()
         {
-            var totalProperties = this.data.Properties.Count();
-            var totalUsers = this.data.Users.Count();
+            var totalStatistics = this.statistics.Total();
 
-            return new StatisticsResponseModel
-            {
-                TotalProperties = totalProperties,
-                TotalUsers = totalUsers,
-                TotalSales = 0
-            };
+            return totalStatistics;
         }
 
 

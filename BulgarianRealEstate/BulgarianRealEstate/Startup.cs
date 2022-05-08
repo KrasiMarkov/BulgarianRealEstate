@@ -1,6 +1,7 @@
 using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
 using BulgarianRealEstate.Infrastructure;
+using BulgarianRealEstate.Services.Statistics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -42,6 +43,7 @@ namespace BulgarianRealEstate
                 .AddEntityFrameworkStores<RealEstateDbContext>();
 
             services.AddControllersWithViews();
+            services.AddTransient<IStatisticsService, StatisticsService>();
         }
 
         

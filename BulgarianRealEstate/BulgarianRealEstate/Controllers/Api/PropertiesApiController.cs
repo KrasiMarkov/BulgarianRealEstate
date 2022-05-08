@@ -123,6 +123,7 @@ namespace BulgarianRealEstate.Controllers.Api
             return new AllPropertiesApiResponseModel
             {
                 CurrentPage = query.CurrentPage,
+                PropertiesPerPage = query.PropertiesPerPage,
                 TotalProperties = totalProperties,
                 Properties = properties
             };

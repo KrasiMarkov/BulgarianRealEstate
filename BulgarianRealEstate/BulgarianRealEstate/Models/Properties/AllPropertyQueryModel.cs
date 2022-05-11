@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BulgarianRealEstate.Services.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace BulgarianRealEstate.Models.Properties
 
         public int TotalProperties { get; set; }
 
-        public List<PropertyListingViewModel> Properties { get; set; }
+        public IEnumerable<PropertyServiceModel> Properties { get; set; }
 
         public IEnumerable<BuildingTypeViewModel> BuildingTypes { get; set; }
 

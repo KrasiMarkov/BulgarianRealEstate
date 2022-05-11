@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BulgarianRealEstate.Models.Properties
+namespace BulgarianRealEstate.Services.Properties
 {
-    public class PropertyListingViewModel
+    public class PropertyServiceModel
     {
         public int Id { get; init; }
         public int Size { get; init; }
@@ -27,7 +27,6 @@ namespace BulgarianRealEstate.Models.Properties
         public List<byte[]> Images { get; set; }
 
         public string Description { get; init; }
-
 
     }
 }

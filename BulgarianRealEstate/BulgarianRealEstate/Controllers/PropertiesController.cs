@@ -2,6 +2,7 @@
 using BulgarianRealEstate.Data.Models;
 using BulgarianRealEstate.Infrastructure;
 using BulgarianRealEstate.Models.Properties;
+using BulgarianRealEstate.Services.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,120 +17,38 @@ namespace BulgarianRealEstate.Controllers
 {
     public class PropertiesController : Controller
     {
+        private readonly IPropertyService properties;
         private readonly RealEstateDbContext data;
 
-        public PropertiesController(RealEstateDbContext data)
+        public PropertiesController(RealEstateDbContext data, IPropertyService properties)
         {
             this.data = data;
+            this.properties = properties;
         }
 
 
         public IActionResult All([FromQuery] AllPropertyQueryModel query) 
         {
 
-            var propertiesQuery = this.data.Properties.AsQueryable();
-
-           
-
-            if (!string.IsNullOrWhiteSpace(query.Keyword)) 
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Description.ToLower().Contains(query.Keyword.ToLower()));
-            }
-
-            if (query.DistrictId != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.DistrictId == query.DistrictId);
-            }
-
-            if (query.BuildingTypeId != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.BuildingTypeId == query.BuildingTypeId);
-            }
-
-            if (query.PropertyTypeId != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.PropertyTypeId == query.PropertyTypeId);
-            }
-
-            if (query.MinPrice != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Price >= query.MinPrice);
-            }
-
-            if (query.MaxPrice != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Price <= query.MaxPrice);
-            }
-
-            if (query.MinSize != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Size >= query.MinSize);
-            }
-
-            if (query.MaxSize != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Size <= query.MaxSize);
-            }
-
-            if (query.MinYear != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Year >= query.MinYear);
-            }
-
-            if (query.MaxYear != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Year <= query.MaxYear);
-            }
-
-            if (query.MinFloor != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Floor >= query.MinFloor);
-            }
-
-            if (query.MaxFloor != 0)
-            {
-                propertiesQuery = propertiesQuery.Where(p =>
-                p.Floor <= query.MaxFloor);
-            }
-
-            var totalProperties = propertiesQuery.Count();
-
-            var properties = propertiesQuery
-                                    .OrderByDescending(p => p.Id)
-                                    .Skip((query.CurrentPage - 1) * AllPropertyQueryModel.PropertiesPerPage)
-                                    .Take(AllPropertyQueryModel.PropertiesPerPage)
-                                    .Select(x => new PropertyListingViewModel
-                                    {
-
-                                        Size = x.Size,
-                                        Floor = x.Floor,
-                                        TotalNumberOfFloor = x.TotalNumberOfFloor,
-                                        Year = x.Year,
-                                        District = x.District.Name,
-                                        PropertyType = x.PropertyType.Name,
-                                        BuildingType = x.BuildingType.Name,
-                                        Price = x.Price,
-                                        Description = x.Description,
-                                        Images = x.PropertyImages
-                                                                .Select(i => i.Image.Content)
-                                                                .ToList()
-
-                                    }).ToList();
+            var queryResults = this.properties.All(
+            query.Keyword,
+            query.DistrictId,
+            query.BuildingTypeId,
+            query.PropertyTypeId,
+            query.MinPrice,
+            query.MaxPrice,
+            query.MinSize,
+            query.MaxSize,
+            query.MinYear,
+            query.MaxYear,
+            query.MinFloor,
+            query.MaxFloor,
+            query.CurrentPage,
+            AllPropertyQueryModel.PropertiesPerPage);
 
 
-                query.Properties = properties;
-                query.TotalProperties = totalProperties;
+                query.Properties = queryResults.Properties;
+                query.TotalProperties = queryResults.TotalProperties;
                 query.BuildingTypes = this.GetBuildingTypes();
                 query.PropertyTypes = this.GetPropertyTypes();
                 query.Districts = this.GetDistricts();

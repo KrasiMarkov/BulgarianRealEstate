@@ -35,7 +35,7 @@ namespace BulgarianRealEstate.Models.Api.Properties
 
         public int CurrentPage { get; set; } = 1;
 
-        public int TotalProperties { get; set; }
+       
 
     }
 }

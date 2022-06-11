@@ -2,6 +2,7 @@
 using BulgarianRealEstate.Data.Models;
 using BulgarianRealEstate.Infrastructure;
 using BulgarianRealEstate.Models.Properties;
+using BulgarianRealEstate.Services.Dealers;
 using BulgarianRealEstate.Services.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,12 +19,14 @@ namespace BulgarianRealEstate.Controllers
     public class PropertiesController : Controller
     {
         private readonly IPropertyService properties;
+        private readonly IDealerService dealer;
         private readonly RealEstateDbContext data;
 
-        public PropertiesController(RealEstateDbContext data, IPropertyService properties)
+        public PropertiesController(RealEstateDbContext data, IPropertyService properties, IDealerService dealer)
         {
             this.data = data;
             this.properties = properties;
+            this.dealer = dealer;
         }
 
 
@@ -157,6 +160,15 @@ namespace BulgarianRealEstate.Controllers
             this.data.SaveChanges();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public IActionResult Mine() 
+        {
+
+            var myProperties = this.properties.ByUsers(this.User.GetId());
+
+            return View(myProperties);
         }
 
         private IEnumerable<BuildingTypeViewModel> GetBuildingTypes()

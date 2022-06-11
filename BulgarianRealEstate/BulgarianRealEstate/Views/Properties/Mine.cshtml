@@ -1,0 +1,12 @@
+﻿@model IEnumerable<PropertyServiceModel>
+
+@{
+    ViewBag.Title = "My Properties";
+}
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">You don't have any properties yet!</h2>
+}
+
+<partial name="_PropertyPartial" model="@Model"/>

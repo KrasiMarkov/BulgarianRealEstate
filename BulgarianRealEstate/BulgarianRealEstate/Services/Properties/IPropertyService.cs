@@ -24,6 +24,6 @@ namespace BulgarianRealEstate.Services.Properties
             int propertiesPerPage);
 
 
-
+        IEnumerable<PropertyServiceModel> ByUsers(string userId);
     }
 }

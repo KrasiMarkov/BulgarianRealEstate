@@ -1,6 +1,7 @@
 using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
 using BulgarianRealEstate.Infrastructure;
+using BulgarianRealEstate.Services.Dealers;
 using BulgarianRealEstate.Services.Properties;
 using BulgarianRealEstate.Services.Statistics;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,9 +45,13 @@ namespace BulgarianRealEstate
                 })
                 .AddEntityFrameworkStores<RealEstateDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>(); 
+            });
             services.AddTransient<IStatisticsService, StatisticsService>();
             services.AddTransient<IPropertyService, PropertyService>();
+            services.AddTransient<IDealerService, DealerService>();
         }
 
         

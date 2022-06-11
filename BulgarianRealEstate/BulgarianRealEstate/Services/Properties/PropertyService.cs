@@ -1,4 +1,5 @@
 ﻿using BulgarianRealEstate.Data;
+using BulgarianRealEstate.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,27 +111,12 @@ namespace BulgarianRealEstate.Services.Properties
 
             var totalProperties = propertiesQuery.Count();
 
-            var properties = propertiesQuery
-                                    .OrderByDescending(p => p.Id)
-                                    .Skip((currentPage - 1) * propertiesPerPage)
-                                    .Take(propertiesPerPage)
-                                    .Select(x => new PropertyServiceModel
-                                    {
 
-                                        Size = x.Size,
-                                        Floor = x.Floor,
-                                        TotalNumberOfFloor = x.TotalNumberOfFloor,
-                                        Year = x.Year,
-                                        District = x.District.Name,
-                                        PropertyType = x.PropertyType.Name,
-                                        BuildingType = x.BuildingType.Name,
-                                        Price = x.Price,
-                                        Description = x.Description,
-                                        Images = x.PropertyImages
-                                                                .Select(i => i.Image.Content)
-                                                                .ToList()
-
-                                    }).ToList();
+            var properties = GetProperties(propertiesQuery
+                             .OrderByDescending(p => p.Id)
+                             .Skip((currentPage - 1) * propertiesPerPage)
+                             .Take(propertiesPerPage));
+                                  
 
             return new PropertyQueryServiceModel
             {
@@ -140,5 +126,31 @@ namespace BulgarianRealEstate.Services.Properties
                 Properties = properties
             };
         }
+
+        public IEnumerable<PropertyServiceModel> ByUsers(string userId)
+        => this.GetProperties(this.data
+            .Properties
+            .Where(p => p.Dealer.UserId == userId));
+
+
+        private IEnumerable<PropertyServiceModel> GetProperties(IQueryable<Property> propertyQuery)
+        => propertyQuery
+                         .Select(x => new PropertyServiceModel
+                         {
+
+                             Size = x.Size,
+                             Floor = x.Floor,
+                             TotalNumberOfFloor = x.TotalNumberOfFloor,
+                             Year = x.Year,
+                             District = x.District.Name,
+                             PropertyType = x.PropertyType.Name,
+                             BuildingType = x.BuildingType.Name,
+                             Price = x.Price,
+                             Description = x.Description,
+                             Images = x.PropertyImages
+                                                                .Select(i => i.Image.Content)
+                                                                .ToList()
+
+                         }).ToList();
     }
 }

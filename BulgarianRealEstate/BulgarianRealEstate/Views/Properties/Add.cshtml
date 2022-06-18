@@ -1,4 +1,4 @@
-﻿@model AddPropertyFormModel
+﻿@model PropertyFormModel
 
 @{
     ViewBag.Title = "Add Property";
@@ -43,6 +43,7 @@
 
                     }
                 </select>
+                <span asp-validation-for="DistrictId" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BuildingTypeId"></label>
@@ -53,6 +54,7 @@
 
                     }
                 </select>
+                <span asp-validation-for="BuildingTypeId" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PropertyTypeId"></label>
@@ -63,6 +65,7 @@
 
                     }
                 </select>
+                <span asp-validation-for="PropertyTypeId" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description"></label>

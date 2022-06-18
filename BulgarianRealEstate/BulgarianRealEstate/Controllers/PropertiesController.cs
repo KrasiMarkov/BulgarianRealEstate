@@ -19,14 +19,14 @@ namespace BulgarianRealEstate.Controllers
     public class PropertiesController : Controller
     {
         private readonly IPropertyService properties;
-        private readonly IDealerService dealer;
+        private readonly IDealerService dealers;
         private readonly RealEstateDbContext data;
 
-        public PropertiesController(RealEstateDbContext data, IPropertyService properties, IDealerService dealer)
+        public PropertiesController(RealEstateDbContext data, IPropertyService properties, IDealerService dealers)
         {
             this.data = data;
             this.properties = properties;
-            this.dealer = dealer;
+            this.dealers = dealers;
         }
 
 
@@ -52,9 +52,9 @@ namespace BulgarianRealEstate.Controllers
 
                 query.Properties = queryResults.Properties;
                 query.TotalProperties = queryResults.TotalProperties;
-                query.BuildingTypes = this.GetBuildingTypes();
-                query.PropertyTypes = this.GetPropertyTypes();
-                query.Districts = this.GetDistricts();
+                query.BuildingTypes = this.properties.GetBuildingTypes();
+                query.PropertyTypes = this.properties.GetPropertyTypes();
+                query.Districts = this.properties.GetDistricts();
 
             return View(query);
 
@@ -64,40 +64,46 @@ namespace BulgarianRealEstate.Controllers
         public IActionResult Add()
         {
 
-            if (!this.UserIsDealer()) 
+            if (!this.dealers.IsDealer(this.User.GetId())) 
             {
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
-    
 
-            return View(new AddPropertyFormModel
+
+            return View(new PropertyFormModel
             {
 
-                PropertyTypes = this.GetPropertyTypes(),
-                Districts = this.GetDistricts(),
-                BuildingTypes = this.GetBuildingTypes()
+                PropertyTypes = this.properties.GetPropertyTypes(),
+                Districts = this.properties.GetDistricts(),
+                BuildingTypes = this.properties.GetBuildingTypes()
             });
         }
 
         
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddPropertyFormModel property, List<IFormFile> images)
+        public IActionResult Add(PropertyFormModel property, List<IFormFile> images)
         {
-            var dealerId = this.data
-                               .Dealers
-                               .Where(d => d.UserId == this.User.GetId())
-                               .Select(d => d.Id)
-                               .FirstOrDefault();
+            var dealerId = dealers.GetIdByUser(this.User.GetId());
 
             if (dealerId == 0)
             {
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
 
-            if (!this.data.PropertyTypes.Any(p => p.Id == property.PropertyTypeId)) 
+            if (!this.properties.PropertyTypeExists(property.PropertyTypeId)) 
             {
                 this.ModelState.AddModelError(nameof(property.PropertyTypeId), "The category does not exist");
+            }
+
+            if (!this.properties.DistrictExists(property.DistrictId))
+            {
+                this.ModelState.AddModelError(nameof(property.DistrictId), "The category does not exist");
+            }
+
+            if (!this.properties.BuildingTypeExists(property.BuildingTypeId))
+            {
+                this.ModelState.AddModelError(nameof(property.BuildingTypeId), "The category does not exist");
             }
 
             if (images == null || images.Any(x => x.Length > 2 * 1024 * 1024))
@@ -107,59 +113,27 @@ namespace BulgarianRealEstate.Controllers
 
             if (!ModelState.IsValid) 
             {
-                property.BuildingTypes = this.GetBuildingTypes();
-                property.Districts = this.GetDistricts();
-                property.PropertyTypes = this.GetPropertyTypes();
+                property.BuildingTypes = this.properties.GetBuildingTypes();
+                property.Districts = this.properties.GetDistricts();
+                property.PropertyTypes = this.properties.GetPropertyTypes();
 
                 return View(property);
             }
 
-            var propertyData = new Property
-            {
-                Size = property.Size,
-                Floor = property.Floor,
-                TotalNumberOfFloor = property.TotalNumberOfFloor,
-                Year = property.Year,
-                DistrictId = property.DistrictId,
-                PropertyTypeId = property.PropertyTypeId,
-                BuildingTypeId = property.BuildingTypeId,
-                Price = property.Price,
-                Description = property.Description,
-                DealerId = dealerId
-                
-            };
+            this.properties.Create(
+                property.Size,
+                property.Floor,
+                property.TotalNumberOfFloor,
+                property.Year,
+                property.DistrictId,
+                property.PropertyTypeId,
+                property.BuildingTypeId,
+                property.Price,
+                property.Description,
+                dealerId,
+                images);
 
-
-            foreach (var image in images)
-            {
-                var imageInMemory = new MemoryStream();
-                image.CopyTo(imageInMemory);
-                var imageBytes = imageInMemory.ToArray();
-
-                var imageData = new Image
-                {
-                    Content = imageBytes
-                };
-
-                this.data.Images.Add(imageData);
-                this.data.SaveChanges();
-
-
-                propertyData.PropertyImages.Add(new PropertyImage
-                {
-                    ImageId = imageData.Id
-                });
-            }
-
-            
-            
-            
-
-
-            this.data.Properties.Add(propertyData);
-            this.data.SaveChanges();
-
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(All));
         }
 
         [Authorize]
@@ -171,38 +145,12 @@ namespace BulgarianRealEstate.Controllers
             return View(myProperties);
         }
 
-        private IEnumerable<BuildingTypeViewModel> GetBuildingTypes()
-            => this.data
-                .BuildingTypes
-                .Select(b => new BuildingTypeViewModel
-                {
-                    Id = b.Id,
-                    Name = b.Name
-                })
-                .ToList();
+        
+       
 
-        private IEnumerable<DistrictViewModel> GetDistricts()
-           => this.data
-               .Districts
-               .Select(d => new DistrictViewModel
-               {
-                   Id = d.Id,
-                   Name = d.Name
-               })
-               .ToList();
+        
 
-        private IEnumerable<PropertyTypeViewModel> GetPropertyTypes()
-           => this.data
-               .PropertyTypes
-               .Select(p => new PropertyTypeViewModel
-               {
-                   Id = p.Id,
-                   Name = p.Name
-               })
-               .ToList();
-
-        private bool UserIsDealer() 
-        => this.data.Dealers.Any(d => d.UserId == this.User.GetId());
+        
 
 
 

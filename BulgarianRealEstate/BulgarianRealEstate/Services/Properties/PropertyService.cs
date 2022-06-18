@@ -1,7 +1,10 @@
 ﻿using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
+using BulgarianRealEstate.Models.Properties;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -127,11 +130,57 @@ namespace BulgarianRealEstate.Services.Properties
             };
         }
 
+        public bool BuildingTypeExists(int buildingTypeId)
+           => this.data.BuildingTypes.Any(b => b.Id == buildingTypeId);
+
+
+        public bool DistrictExists(int districtId)
+           => this.data.Districts.Any(d => d.Id == districtId);
+
+        public bool PropertyTypeExists(int propertyTypeId)
+           => this.data.PropertyTypes.Any(p => p.Id == propertyTypeId);
+
+
         public IEnumerable<PropertyServiceModel> ByUsers(string userId)
         => this.GetProperties(this.data
             .Properties
             .Where(p => p.Dealer.UserId == userId));
 
+       
+        
+
+        public IEnumerable<BuildingTypeServiceModel> GetBuildingTypes()
+       => this.data
+                .BuildingTypes
+                .Select(b => new BuildingTypeServiceModel
+                {
+                    Id = b.Id,
+                    Name = b.Name
+                })
+                .ToList();
+
+        public IEnumerable<DistrictServiceModel> GetDistricts()
+        => this.data
+               .Districts
+               .Select(d => new DistrictServiceModel
+               {
+                   Id = d.Id,
+                   Name = d.Name
+               })
+               .ToList();
+
+        public IEnumerable<PropertyTypeServiceModel> GetPropertyTypes()
+        => this.data
+                .PropertyTypes
+                .Select(p => new PropertyTypeServiceModel
+                {
+                    Id = p.Id,
+                    Name = p.Name
+                })
+                .ToList();
+
+      
+        
 
         private IEnumerable<PropertyServiceModel> GetProperties(IQueryable<Property> propertyQuery)
         => propertyQuery
@@ -152,5 +201,61 @@ namespace BulgarianRealEstate.Services.Properties
                                                                 .ToList()
 
                          }).ToList();
+
+        public int Create(
+            int size, 
+            int floor, 
+            int totalNumberOfFloor, 
+            int year, int districtId, 
+            int propertyTypeId, 
+            int buildingTypeId, 
+            int price, 
+            string description, 
+            int dealerId,
+            List<IFormFile> images)
+        {
+
+            var propertyData = new Property
+            {
+                Size = size,
+                Floor = floor,
+                TotalNumberOfFloor = totalNumberOfFloor,
+                Year = year,
+                DistrictId = districtId,
+                PropertyTypeId = propertyTypeId,
+                BuildingTypeId = buildingTypeId,
+                Price = price,
+                Description = description,
+                DealerId = dealerId
+
+            };
+
+
+            foreach (var image in images)
+            {
+                var imageInMemory = new MemoryStream();
+                image.CopyTo(imageInMemory);
+                var imageBytes = imageInMemory.ToArray();
+
+                var imageData = new Image
+                {
+                    Content = imageBytes
+                };
+
+                this.data.Images.Add(imageData);
+                this.data.SaveChanges();
+
+
+                propertyData.PropertyImages.Add(new PropertyImage
+                {
+                    ImageId = imageData.Id
+                });
+            }
+
+            this.data.Properties.Add(propertyData);
+            this.data.SaveChanges();
+
+            return propertyData.Id;
+        }
     }
 }

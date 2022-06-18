@@ -9,5 +9,7 @@ namespace BulgarianRealEstate.Services.Dealers
     {
        public bool IsDealer(string userId);
 
+        public int GetIdByUser(string userId);
+
     }
 }

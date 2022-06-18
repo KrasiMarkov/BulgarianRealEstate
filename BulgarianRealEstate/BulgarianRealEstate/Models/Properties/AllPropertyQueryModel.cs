@@ -53,10 +53,10 @@ namespace BulgarianRealEstate.Models.Properties
 
         public IEnumerable<PropertyServiceModel> Properties { get; set; }
 
-        public IEnumerable<BuildingTypeViewModel> BuildingTypes { get; set; }
+        public IEnumerable<BuildingTypeServiceModel> BuildingTypes { get; set; }
 
-        public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; set; }
+        public IEnumerable<PropertyTypeServiceModel> PropertyTypes { get; set; }
 
-        public IEnumerable<DistrictViewModel> Districts { get; set; }
+        public IEnumerable<DistrictServiceModel> Districts { get; set; }
     }
 }

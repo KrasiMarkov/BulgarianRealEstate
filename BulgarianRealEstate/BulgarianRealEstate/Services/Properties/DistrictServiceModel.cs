@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace BulgarianRealEstate.Models.Properties
 {
-    public class BuildingTypeViewModel
+    public class DistrictServiceModel
     {
         public int Id { get; set; }
 
         public string Name { get; set; }
+
     }
 }

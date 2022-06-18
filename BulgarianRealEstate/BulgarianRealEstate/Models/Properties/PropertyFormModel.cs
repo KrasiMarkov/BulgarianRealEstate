@@ -7,7 +7,7 @@ using static BulgarianRealEstate.Data.DataConstants.Property;
 
 namespace BulgarianRealEstate.Models.Properties
 {
-    public class AddPropertyFormModel
+    public class PropertyFormModel
     {
         [Range(SizeMinValue, SizeMaxValue)]
         public int Size { get; init; }
@@ -38,11 +38,11 @@ namespace BulgarianRealEstate.Models.Properties
         [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength)]
         public string Description { get; init; }
 
-        public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; set; }
+        public IEnumerable<PropertyTypeServiceModel> PropertyTypes { get; set; }
 
-        public IEnumerable<DistrictViewModel> Districts { get; set; }
+        public IEnumerable<DistrictServiceModel> Districts { get; set; }
 
-        public IEnumerable<BuildingTypeViewModel> BuildingTypes { get; set; }
+        public IEnumerable<BuildingTypeServiceModel> BuildingTypes { get; set; }
 
         
 

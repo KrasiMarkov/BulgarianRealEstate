@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BulgarianRealEstate.Models.Properties;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,5 +27,29 @@ namespace BulgarianRealEstate.Services.Properties
 
 
         IEnumerable<PropertyServiceModel> ByUsers(string userId);
+
+        bool PropertyTypeExists(int propertyTypeId);
+
+        bool DistrictExists(int districtId);
+
+        bool BuildingTypeExists(int buildingTypeId);
+
+        int Create( int size,
+                int floor,
+                int totalNumberOfFloor,
+                int year,
+                int districtId,
+                int propertyTypeId,
+                int buildingTypeId,
+                int price,
+                string description,
+                int dealerId,
+                List<IFormFile> images);
+
+        IEnumerable<PropertyTypeServiceModel> GetPropertyTypes();
+
+        IEnumerable<DistrictServiceModel> GetDistricts();
+
+        IEnumerable<BuildingTypeServiceModel> GetBuildingTypes();
     }
 }

@@ -1,7 +1,7 @@
 ﻿@model PropertyFormModel
 
 @{
-    ViewBag.Title = "Add Property";
+    ViewBag.Title = "Edit Property";
 }
 
 <div class="row">
@@ -77,6 +77,19 @@
             <div class="form-group">
                 <input type="file" name="Images" multiple />
             </div>
+
+
+            <div class="card mb-3">
+
+                @{
+                    var base64 = Convert.ToBase64String(Model.Images[0]);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                }
+
+                <img class="card-img-top" src="@imgSrc">
+               
+            </div>
+
 
             <div class="form-group">
                 <input class="btn btn-primary" type="submit" value="Save" />

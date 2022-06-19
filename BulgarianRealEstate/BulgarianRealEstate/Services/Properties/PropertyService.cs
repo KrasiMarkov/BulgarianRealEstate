@@ -186,14 +186,14 @@ namespace BulgarianRealEstate.Services.Properties
         => propertyQuery
                          .Select(x => new PropertyServiceModel
                          {
-
+                             Id = x.Id,
                              Size = x.Size,
                              Floor = x.Floor,
                              TotalNumberOfFloor = x.TotalNumberOfFloor,
                              Year = x.Year,
-                             District = x.District.Name,
-                             PropertyType = x.PropertyType.Name,
-                             BuildingType = x.BuildingType.Name,
+                             DistrictName = x.District.Name,
+                             PropertyTypeName = x.PropertyType.Name,
+                             BuildingTypeName = x.BuildingType.Name,
                              Price = x.Price,
                              Description = x.Description,
                              Images = x.PropertyImages
@@ -257,5 +257,88 @@ namespace BulgarianRealEstate.Services.Properties
 
             return propertyData.Id;
         }
+
+        public PropertyDetailsServiceModel Details(int id)
+           => this.data
+                  .Properties
+                  .Where(p => p.Id == id)
+                  .Select(p => new PropertyDetailsServiceModel
+                  {
+                      Size = p.Size,
+                      Floor = p.Floor,
+                      TotalNumberOfFloor = p.TotalNumberOfFloor,
+                      Year = p.Year,
+                      DistrictName = p.District.Name,
+                      PropertyTypeName = p.PropertyType.Name,
+                      BuildingTypeName = p.BuildingType.Name,
+                      Description = p.Description,
+                      Price = p.Price,
+                      DealerId = p.DealerId,
+                      DealerName = p.Dealer.Name,
+                      UserId = p.Dealer.UserId,
+                      Images = p.PropertyImages
+                                              .Select(i => i.Image.Content)
+                                              .ToList()
+
+                  })
+                  .FirstOrDefault();
+
+        //public bool Edit(int id, 
+        //    int size, 
+        //    int floor, 
+        //    int totalNumberOfFloor, 
+        //    int year, 
+        //    int districtId, 
+        //    int propertyTypeId, 
+        //    int buildingTypeId, 
+        //    int price, 
+        //    string description, 
+        //    int dealerId, 
+        //    List<IFormFile> images)
+        //{
+
+        //    var propertyData = this.data.Properties.Find(id);
+
+        //    if (propertyData.DealerId != dealerId) 
+        //    {
+        //        return false;
+        //    }
+
+        //    propertyData.Size = size;
+        //    propertyData.Floor = floor;
+        //    propertyData.TotalNumberOfFloor = totalNumberOfFloor;
+        //    propertyData.Year = year;
+        //    propertyData.DistrictId = districtId;
+        //    propertyData.PropertyTypeId = propertyTypeId;
+        //    propertyData.BuildingTypeId = buildingTypeId;
+        //    propertyData.Price = price;
+        //    propertyData.Description = description;
+            
+
+        //    foreach (var image in images)
+        //    {
+        //        var imageInMemory = new MemoryStream();
+        //        image.CopyTo(imageInMemory);
+        //        var imageBytes = imageInMemory.ToArray();
+
+        //        var imageData = new Image
+        //        {
+        //            Content = imageBytes
+        //        };
+
+        //        this.data.Images.Add(imageData);
+        //        this.data.SaveChanges();
+
+
+        //        propertyData.PropertyImages.Add(new PropertyImage
+        //        {
+        //            ImageId = imageData.Id
+        //        });
+        //    }
+
+        //    this.data.Properties.Add(propertyData);
+        //    this.data.SaveChanges();
+
+        //}
     }
 }

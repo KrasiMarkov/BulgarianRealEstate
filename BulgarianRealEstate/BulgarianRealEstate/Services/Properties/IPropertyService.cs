@@ -46,6 +46,21 @@ namespace BulgarianRealEstate.Services.Properties
                 int dealerId,
                 List<IFormFile> images);
 
+        //bool Edit(int id,
+        //        int size,
+        //        int floor,
+        //        int totalNumberOfFloor,
+        //        int year,
+        //        int districtId,
+        //        int propertyTypeId,
+        //        int buildingTypeId,
+        //        int price,
+        //        string description,
+        //        int dealerId,
+        //        List<IFormFile> images);
+
+        PropertyDetailsServiceModel Details(int id);
+
         IEnumerable<PropertyTypeServiceModel> GetPropertyTypes();
 
         IEnumerable<DistrictServiceModel> GetDistricts();

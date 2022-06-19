@@ -30,7 +30,7 @@ namespace BulgarianRealEstate.Controllers
         }
 
 
-        public IActionResult All([FromQuery] AllPropertyQueryModel query) 
+        public IActionResult All([FromQuery] AllPropertyQueryModel query)
         {
 
             var queryResults = this.properties.All(
@@ -50,11 +50,11 @@ namespace BulgarianRealEstate.Controllers
             AllPropertyQueryModel.PropertiesPerPage);
 
 
-                query.Properties = queryResults.Properties;
-                query.TotalProperties = queryResults.TotalProperties;
-                query.BuildingTypes = this.properties.GetBuildingTypes();
-                query.PropertyTypes = this.properties.GetPropertyTypes();
-                query.Districts = this.properties.GetDistricts();
+            query.Properties = queryResults.Properties;
+            query.TotalProperties = queryResults.TotalProperties;
+            query.BuildingTypes = this.properties.GetBuildingTypes();
+            query.PropertyTypes = this.properties.GetPropertyTypes();
+            query.Districts = this.properties.GetDistricts();
 
             return View(query);
 
@@ -64,7 +64,7 @@ namespace BulgarianRealEstate.Controllers
         public IActionResult Add()
         {
 
-            if (!this.dealers.IsDealer(this.User.GetId())) 
+            if (!this.dealers.IsDealer(this.User.GetId()))
             {
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
@@ -79,7 +79,7 @@ namespace BulgarianRealEstate.Controllers
             });
         }
 
-        
+
         [HttpPost]
         [Authorize]
         public IActionResult Add(PropertyFormModel property, List<IFormFile> images)
@@ -91,7 +91,7 @@ namespace BulgarianRealEstate.Controllers
                 return RedirectToAction(nameof(DealersController.Become), "Dealers");
             }
 
-            if (!this.properties.PropertyTypeExists(property.PropertyTypeId)) 
+            if (!this.properties.PropertyTypeExists(property.PropertyTypeId))
             {
                 this.ModelState.AddModelError(nameof(property.PropertyTypeId), "The category does not exist");
             }
@@ -111,7 +111,7 @@ namespace BulgarianRealEstate.Controllers
                 this.ModelState.AddModelError("Image", "The image is not valid. It is required and it should be less than 2 MB.");
             }
 
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
             {
                 property.BuildingTypes = this.properties.GetBuildingTypes();
                 property.Districts = this.properties.GetDistricts();
@@ -137,7 +137,7 @@ namespace BulgarianRealEstate.Controllers
         }
 
         [Authorize]
-        public IActionResult Mine() 
+        public IActionResult Mine()
         {
 
             var myProperties = this.properties.ByUsers(this.User.GetId());
@@ -145,15 +145,96 @@ namespace BulgarianRealEstate.Controllers
             return View(myProperties);
         }
 
-        
-       
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.GetId();
 
-        
+            if (!this.dealers.IsDealer(userId))
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
 
-        
+            var property = this.properties.Details(id);
 
+            if (property.UserId != userId)
+            {
+                return Unauthorized();
+            }
 
+            return View(new PropertyFormModel
+            {
+                Size = property.Size,
+                Floor = property.Floor,
+                TotalNumberOfFloor = property.TotalNumberOfFloor,
+                Year = property.Year,
+                DistrictId = property.DistrictId,
+                PropertyTypeId = property.PropertyTypeId,
+                BuildingTypeId = property.BuildingTypeId,
+                Price = property.Price,
+                Description = property.Description,
+                PropertyTypes = this.properties.GetPropertyTypes(),
+                Districts = this.properties.GetDistricts(),
+                BuildingTypes = this.properties.GetBuildingTypes(),
+                Images = property.Images
+            });
+        }
 
+        //[Authorize]
+        //[HttpPost]
+        //public IActionResult Edit(int id, PropertyFormModel property, List<IFormFile> images) 
+        //{
+        //    var dealerId = dealers.GetIdByUser(this.User.GetId());
+
+        //    if (dealerId == 0)
+        //    {
+        //        return RedirectToAction(nameof(DealersController.Become), "Dealers");
+        //    }
+
+        //    if (!this.properties.PropertyTypeExists(property.PropertyTypeId))
+        //    {
+        //        this.ModelState.AddModelError(nameof(property.PropertyTypeId), "The category does not exist");
+        //    }
+
+        //    if (!this.properties.DistrictExists(property.DistrictId))
+        //    {
+        //        this.ModelState.AddModelError(nameof(property.DistrictId), "The category does not exist");
+        //    }
+
+        //    if (!this.properties.BuildingTypeExists(property.BuildingTypeId))
+        //    {
+        //        this.ModelState.AddModelError(nameof(property.BuildingTypeId), "The category does not exist");
+        //    }
+
+        //    if (images == null || images.Any(x => x.Length > 2 * 1024 * 1024))
+        //    {
+        //        this.ModelState.AddModelError("Image", "The image is not valid. It is required and it should be less than 2 MB.");
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        property.BuildingTypes = this.properties.GetBuildingTypes();
+        //        property.Districts = this.properties.GetDistricts();
+        //        property.PropertyTypes = this.properties.GetPropertyTypes();
+
+        //        return View(property);
+        //    }
+
+        //    this.properties.Edit(id,
+        //        property.Size,
+        //        property.Floor,
+        //        property.TotalNumberOfFloor,
+        //        property.Year,
+        //        property.DistrictId,
+        //        property.PropertyTypeId,
+        //        property.BuildingTypeId,
+        //        property.Price,
+        //        property.Description,
+        //        dealerId,
+        //        images);
+
+        //    return RedirectToAction(nameof(All));
+        //}
 
     }
 }

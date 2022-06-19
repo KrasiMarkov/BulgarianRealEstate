@@ -8,6 +8,7 @@ namespace BulgarianRealEstate.Services.Properties
     public class PropertyServiceModel
     {
         public int Id { get; init; }
+
         public int Size { get; init; }
 
         public int Floor { get; init; }
@@ -16,11 +17,11 @@ namespace BulgarianRealEstate.Services.Properties
 
         public int Year { get; init; }
 
-        public string District { get; init; }
+        public string DistrictName { get; init; }
 
-        public string PropertyType { get; init; }
+        public string PropertyTypeName { get; init; }
 
-        public string BuildingType { get; init; }
+        public string BuildingTypeName { get; init; }
 
         public int Price { get; init; }
 

@@ -28,6 +28,8 @@ namespace BulgarianRealEstate.Services.Properties
 
         IEnumerable<PropertyServiceModel> ByUsers(string userId);
 
+        bool IsByDealer(int propertyId, int dealerId);
+
         bool PropertyTypeExists(int propertyTypeId);
 
         bool DistrictExists(int districtId);
@@ -46,20 +48,19 @@ namespace BulgarianRealEstate.Services.Properties
                 int dealerId,
                 List<IFormFile> images);
 
-        //bool Edit(int id,
-        //        int size,
-        //        int floor,
-        //        int totalNumberOfFloor,
-        //        int year,
-        //        int districtId,
-        //        int propertyTypeId,
-        //        int buildingTypeId,
-        //        int price,
-        //        string description,
-        //        int dealerId,
-        //        List<IFormFile> images);
+        bool Edit(int propertyId,
+                int size,
+                int floor,
+                int totalNumberOfFloor,
+                int year,
+                int districtId,
+                int propertyTypeId,
+                int buildingTypeId,
+                int price,
+                string description,
+                List<IFormFile> images);
 
-        PropertyDetailsServiceModel Details(int id);
+        PropertyDetailsServiceModel Details(int propertyId);
 
         IEnumerable<PropertyTypeServiceModel> GetPropertyTypes();
 

@@ -180,61 +180,67 @@ namespace BulgarianRealEstate.Controllers
             });
         }
 
-        //[Authorize]
-        //[HttpPost]
-        //public IActionResult Edit(int id, PropertyFormModel property, List<IFormFile> images) 
-        //{
-        //    var dealerId = dealers.GetIdByUser(this.User.GetId());
+        [Authorize]
+        [HttpPost]
+        public IActionResult Edit(int id, PropertyFormModel property, List<IFormFile> images)
+        {
+            var dealerId = dealers.GetIdByUser(this.User.GetId());
 
-        //    if (dealerId == 0)
-        //    {
-        //        return RedirectToAction(nameof(DealersController.Become), "Dealers");
-        //    }
+            if (dealerId == 0)
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
 
-        //    if (!this.properties.PropertyTypeExists(property.PropertyTypeId))
-        //    {
-        //        this.ModelState.AddModelError(nameof(property.PropertyTypeId), "The category does not exist");
-        //    }
+            if (!this.properties.PropertyTypeExists(property.PropertyTypeId))
+            {
+                this.ModelState.AddModelError(nameof(property.PropertyTypeId), "The category does not exist");
+            }
 
-        //    if (!this.properties.DistrictExists(property.DistrictId))
-        //    {
-        //        this.ModelState.AddModelError(nameof(property.DistrictId), "The category does not exist");
-        //    }
+            if (!this.properties.DistrictExists(property.DistrictId))
+            {
+                this.ModelState.AddModelError(nameof(property.DistrictId), "The category does not exist");
+            }
 
-        //    if (!this.properties.BuildingTypeExists(property.BuildingTypeId))
-        //    {
-        //        this.ModelState.AddModelError(nameof(property.BuildingTypeId), "The category does not exist");
-        //    }
+            if (!this.properties.BuildingTypeExists(property.BuildingTypeId))
+            {
+                this.ModelState.AddModelError(nameof(property.BuildingTypeId), "The category does not exist");
+            }
 
-        //    if (images == null || images.Any(x => x.Length > 2 * 1024 * 1024))
-        //    {
-        //        this.ModelState.AddModelError("Image", "The image is not valid. It is required and it should be less than 2 MB.");
-        //    }
+            if (images == null || images.Any(x => x.Length > 2 * 1024 * 1024))
+            {
+                this.ModelState.AddModelError("Image", "The image is not valid. It is required and it should be less than 2 MB.");
+            }
 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        property.BuildingTypes = this.properties.GetBuildingTypes();
-        //        property.Districts = this.properties.GetDistricts();
-        //        property.PropertyTypes = this.properties.GetPropertyTypes();
+            if (!ModelState.IsValid)
+            {
+                property.BuildingTypes = this.properties.GetBuildingTypes();
+                property.Districts = this.properties.GetDistricts();
+                property.PropertyTypes = this.properties.GetPropertyTypes();
 
-        //        return View(property);
-        //    }
+                return View(property);
+            }
 
-        //    this.properties.Edit(id,
-        //        property.Size,
-        //        property.Floor,
-        //        property.TotalNumberOfFloor,
-        //        property.Year,
-        //        property.DistrictId,
-        //        property.PropertyTypeId,
-        //        property.BuildingTypeId,
-        //        property.Price,
-        //        property.Description,
-        //        dealerId,
-        //        images);
+            if (!this.properties.IsByDealer(id, dealerId)) 
+            {
+                return BadRequest();
+            }
 
-        //    return RedirectToAction(nameof(All));
-        //}
+            this.properties.Edit(id,
+                property.Size,
+                property.Floor,
+                property.TotalNumberOfFloor,
+                property.Year,
+                property.DistrictId,
+                property.PropertyTypeId,
+                property.BuildingTypeId,
+                property.Price,
+                property.Description,
+                images);
+
+          
+
+            return RedirectToAction(nameof(All));
+        }
 
     }
 }

@@ -283,62 +283,70 @@ namespace BulgarianRealEstate.Services.Properties
                   })
                   .FirstOrDefault();
 
-        //public bool Edit(int id, 
-        //    int size, 
-        //    int floor, 
-        //    int totalNumberOfFloor, 
-        //    int year, 
-        //    int districtId, 
-        //    int propertyTypeId, 
-        //    int buildingTypeId, 
-        //    int price, 
-        //    string description, 
-        //    int dealerId, 
-        //    List<IFormFile> images)
-        //{
+        public bool Edit(int id,
+            int size,
+            int floor,
+            int totalNumberOfFloor,
+            int year,
+            int districtId,
+            int propertyTypeId,
+            int buildingTypeId,
+            int price,
+            string description,
+            List<IFormFile> images)
+        {
 
-        //    var propertyData = this.data.Properties.Find(id);
+            var propertyData = this.data.Properties.Find(id);
 
-        //    if (propertyData.DealerId != dealerId) 
-        //    {
-        //        return false;
-        //    }
+            if (propertyData == null) 
+            {
+                return false;
+            }
 
-        //    propertyData.Size = size;
-        //    propertyData.Floor = floor;
-        //    propertyData.TotalNumberOfFloor = totalNumberOfFloor;
-        //    propertyData.Year = year;
-        //    propertyData.DistrictId = districtId;
-        //    propertyData.PropertyTypeId = propertyTypeId;
-        //    propertyData.BuildingTypeId = buildingTypeId;
-        //    propertyData.Price = price;
-        //    propertyData.Description = description;
+           
+
+            propertyData.Size = size;
+            propertyData.Floor = floor;
+            propertyData.TotalNumberOfFloor = totalNumberOfFloor;
+            propertyData.Year = year;
+            propertyData.DistrictId = districtId;
+            propertyData.PropertyTypeId = propertyTypeId;
+            propertyData.BuildingTypeId = buildingTypeId;
+            propertyData.Price = price;
+            propertyData.Description = description;
+
+
+            foreach (var image in images)
+            {
+                var imageInMemory = new MemoryStream();
+                image.CopyTo(imageInMemory);
+                var imageBytes = imageInMemory.ToArray();
+
+                var imageData = new Image
+                {
+                    Content = imageBytes
+                };
+
+               
+                this.data.SaveChanges();
+
+
+                propertyData.PropertyImages.Add(new PropertyImage
+                {
+                    ImageId = imageData.Id
+                });
+            }
+
             
+            this.data.SaveChanges();
 
-        //    foreach (var image in images)
-        //    {
-        //        var imageInMemory = new MemoryStream();
-        //        image.CopyTo(imageInMemory);
-        //        var imageBytes = imageInMemory.ToArray();
+            return true;
+            
+        }
 
-        //        var imageData = new Image
-        //        {
-        //            Content = imageBytes
-        //        };
-
-        //        this.data.Images.Add(imageData);
-        //        this.data.SaveChanges();
-
-
-        //        propertyData.PropertyImages.Add(new PropertyImage
-        //        {
-        //            ImageId = imageData.Id
-        //        });
-        //    }
-
-        //    this.data.Properties.Add(propertyData);
-        //    this.data.SaveChanges();
-
-        //}
+        public bool IsByDealer(int propertyId, int dealerId)
+          => this.data
+                 .Properties
+                 .Any(p => p.Id == propertyId && p.DealerId == dealerId);
     }
 }

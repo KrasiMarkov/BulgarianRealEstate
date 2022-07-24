@@ -15,7 +15,7 @@ namespace BulgarianRealEstate.Services.Dealers
             this.data = data;
         }
 
-        public int GetIdByUser(string userId)
+        public int IdByUser(string userId)
           => this.data
                  .Dealers
                  .Where(d => d.UserId == userId)

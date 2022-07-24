@@ -20,11 +20,11 @@ namespace BulgarianRealEstate.Controllers
     {
         private readonly IPropertyService properties;
         private readonly IDealerService dealers;
-        private readonly RealEstateDbContext data;
+        
 
-        public PropertiesController(RealEstateDbContext data, IPropertyService properties, IDealerService dealers)
+        public PropertiesController(IPropertyService properties, IDealerService dealers)
         {
-            this.data = data;
+           
             this.properties = properties;
             this.dealers = dealers;
         }
@@ -84,7 +84,7 @@ namespace BulgarianRealEstate.Controllers
         [Authorize]
         public IActionResult Add(PropertyFormModel property, List<IFormFile> images)
         {
-            var dealerId = dealers.GetIdByUser(this.User.GetId());
+            var dealerId = dealers.IdByUser(this.User.GetId());
 
             if (dealerId == 0)
             {
@@ -184,7 +184,7 @@ namespace BulgarianRealEstate.Controllers
         [HttpPost]
         public IActionResult Edit(int id, PropertyFormModel property, List<IFormFile> images)
         {
-            var dealerId = dealers.GetIdByUser(this.User.GetId());
+            var dealerId = dealers.IdByUser(this.User.GetId());
 
             if (dealerId == 0)
             {

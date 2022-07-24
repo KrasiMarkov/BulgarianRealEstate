@@ -327,7 +327,7 @@ namespace BulgarianRealEstate.Services.Properties
                     Content = imageBytes
                 };
 
-               
+                this.data.Images.Add(imageData);
                 this.data.SaveChanges();
 
 

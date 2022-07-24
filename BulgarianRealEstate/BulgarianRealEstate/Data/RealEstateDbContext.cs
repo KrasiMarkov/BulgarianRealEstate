@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BulgarianRealEstate.Data
 {
-    public class RealEstateDbContext : IdentityDbContext
+    public class RealEstateDbContext : IdentityDbContext<User>
     {
         public RealEstateDbContext(DbContextOptions<RealEstateDbContext> options)
             : base(options)
@@ -73,7 +73,7 @@ namespace BulgarianRealEstate.Data
 
             builder
                .Entity<Dealer>()
-               .HasOne<IdentityUser>()
+               .HasOne<User>()
                .WithOne()
                .HasForeignKey<Dealer>(d => d.UserId)
                .OnDelete(DeleteBehavior.Restrict);

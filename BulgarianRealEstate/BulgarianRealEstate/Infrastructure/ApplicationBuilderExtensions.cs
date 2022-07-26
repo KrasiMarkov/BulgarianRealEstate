@@ -1,12 +1,14 @@
 ﻿using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static BulgarianRealEstate.WebConstants;
 
 namespace BulgarianRealEstate.Infrastructure
 {
@@ -14,20 +16,33 @@ namespace BulgarianRealEstate.Infrastructure
     {
         public static IApplicationBuilder PrepareDatabase(this IApplicationBuilder app) 
         {
-            using var scopedServices = app.ApplicationServices.CreateScope();
+            using var serviseScope = app.ApplicationServices.CreateScope();
 
-            var data = scopedServices.ServiceProvider.GetService<RealEstateDbContext>();
+            var services = serviseScope.ServiceProvider;
 
-            data.Database.Migrate();
+            MigrateDatabase(services);
 
-            SeedData(data);
+            SeedData(services);
+
+            SeedAdministrator(services);
 
             return app;
 
         }
 
-        private static void SeedData(RealEstateDbContext data)
+
+        private static void MigrateDatabase(IServiceProvider services)
         {
+            var data = services.GetRequiredService<RealEstateDbContext>();
+
+            data.Database.Migrate();
+        }
+
+        private static void SeedData(IServiceProvider services)
+        {
+            var data = services.GetRequiredService<RealEstateDbContext>();
+
+
             if (!data.Districts.Any()) 
             {
                 data.Districts.AddRange(new[]
@@ -68,6 +83,41 @@ namespace BulgarianRealEstate.Infrastructure
                 data.SaveChanges();
             }
 
+
+        }
+
+        private static void SeedAdministrator(IServiceProvider services)
+        {
+            var userManager = services.GetRequiredService<UserManager<User>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            Task.Run(async () =>
+            {
+                if (await roleManager.RoleExistsAsync(AdministratorRoleName))
+                {
+                    return;
+                }
+
+                var role = new IdentityRole { Name = AdministratorRoleName };
+
+                await roleManager.CreateAsync(role);
+
+                const string adminEmail = "admin@krasi.com";
+                const string adminPassword = "admin123";
+
+                var user = new User
+                {
+                    Email = adminEmail,
+                    UserName = adminEmail,
+                    FullName = "Admin"
+                };
+
+                await userManager.CreateAsync(user, adminPassword);
+
+                await userManager.AddToRoleAsync(user, role.Name);
+            })
+            .GetAwaiter()
+            .GetResult();
 
         }
 

@@ -46,6 +46,8 @@ namespace BulgarianRealEstate
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<RealEstateDbContext>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>(); 

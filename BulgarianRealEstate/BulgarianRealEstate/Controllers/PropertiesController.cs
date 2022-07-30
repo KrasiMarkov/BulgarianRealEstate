@@ -1,4 +1,5 @@
-﻿using BulgarianRealEstate.Data;
+﻿using AutoMapper;
+using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
 using BulgarianRealEstate.Infrastructure;
 using BulgarianRealEstate.Models.Properties;
@@ -20,13 +21,15 @@ namespace BulgarianRealEstate.Controllers
     {
         private readonly IPropertyService properties;
         private readonly IDealerService dealers;
-        
+        private readonly IMapper mapper;
 
-        public PropertiesController(IPropertyService properties, IDealerService dealers)
+
+        public PropertiesController(IPropertyService properties, IDealerService dealers, IMapper mapper)
         {
-           
+
             this.properties = properties;
             this.dealers = dealers;
+            this.mapper = mapper;
         }
 
 
@@ -162,22 +165,13 @@ namespace BulgarianRealEstate.Controllers
                 return Unauthorized();
             }
 
-            return View(new PropertyFormModel
-            {
-                Size = property.Size,
-                Floor = property.Floor,
-                TotalNumberOfFloor = property.TotalNumberOfFloor,
-                Year = property.Year,
-                DistrictId = property.DistrictId,
-                PropertyTypeId = property.PropertyTypeId,
-                BuildingTypeId = property.BuildingTypeId,
-                Price = property.Price,
-                Description = property.Description,
-                PropertyTypes = this.properties.GetPropertyTypes(),
-                Districts = this.properties.GetDistricts(),
-                BuildingTypes = this.properties.GetBuildingTypes(),
-                Images = property.Images
-            });
+            var propertyForm = this.mapper.Map<PropertyFormModel>(property);
+            propertyForm.PropertyTypes = this.properties.GetPropertyTypes();
+            propertyForm.Districts = this.properties.GetDistricts();
+            propertyForm.BuildingTypes = this.properties.GetBuildingTypes();
+
+            return View(propertyForm);
+           
         }
 
         [Authorize]

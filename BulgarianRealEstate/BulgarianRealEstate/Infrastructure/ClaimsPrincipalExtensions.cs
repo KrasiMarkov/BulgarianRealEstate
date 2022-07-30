@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using static BulgarianRealEstate.WebConstants;
+using static BulgarianRealEstate.Areas.Admin.AdminConstants;
 
 namespace BulgarianRealEstate.Infrastructure
 {

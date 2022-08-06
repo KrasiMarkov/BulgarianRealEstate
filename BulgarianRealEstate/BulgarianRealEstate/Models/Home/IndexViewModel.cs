@@ -13,7 +13,7 @@ namespace BulgarianRealEstate.Models.Home
 
         public int TotalSales { get; init; }
 
-        public List<PropertyIndexViewModel> Properties { get; init; }
-        
+        public List<LatestPropertiesServiceModel> Properties { get; init; }
+
     }
 }

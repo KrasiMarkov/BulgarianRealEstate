@@ -166,6 +166,7 @@ namespace BulgarianRealEstate.Controllers
             }
 
             var propertyForm = this.mapper.Map<PropertyFormModel>(property);
+
             propertyForm.PropertyTypes = this.properties.GetPropertyTypes();
             propertyForm.Districts = this.properties.GetDistricts();
             propertyForm.BuildingTypes = this.properties.GetBuildingTypes();

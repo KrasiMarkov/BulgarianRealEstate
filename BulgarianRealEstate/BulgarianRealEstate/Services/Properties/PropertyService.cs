@@ -1,5 +1,6 @@
 ﻿using BulgarianRealEstate.Data;
 using BulgarianRealEstate.Data.Models;
+using BulgarianRealEstate.Models.Home;
 using BulgarianRealEstate.Models.Properties;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -351,5 +352,26 @@ namespace BulgarianRealEstate.Services.Properties
           => this.data
                  .Properties
                  .Any(p => p.Id == propertyId && p.DealerId == dealerId);
+
+        public List<LatestPropertiesServiceModel> Latest()
+        {
+            var latestProperties = this.data
+                                   .Properties
+                                   .OrderByDescending(p => p.Id)
+                                   .Select(x => new LatestPropertiesServiceModel
+                                   {
+                                       District = x.District.Name,
+                                       PropertyType = x.PropertyType.Name,
+                                       Price = x.Price,
+                                       Images = x.PropertyImages
+                                                               .Select(i => i.Image.Content)
+                                                               .ToList()
+
+                                   })
+                                   .Take(3)
+                                   .ToList();
+
+            return latestProperties;
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BulgarianRealEstate.Models.Home
 {
-    public class PropertyIndexViewModel
+    public class LatestPropertiesServiceModel
     {
         public int Id { get; init; }
 

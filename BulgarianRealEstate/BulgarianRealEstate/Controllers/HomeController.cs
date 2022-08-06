@@ -2,6 +2,7 @@
 using BulgarianRealEstate.Models;
 using BulgarianRealEstate.Models.Home;
 using BulgarianRealEstate.Models.Properties;
+using BulgarianRealEstate.Services.Properties;
 using BulgarianRealEstate.Services.Statistics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -16,48 +17,34 @@ namespace BulgarianRealEstate.Controllers
     public class HomeController : Controller
     {
 
-        private readonly RealEstateDbContext data;
+        private readonly IPropertyService properties;
         private readonly IStatisticsService statistics;
 
-        public HomeController(IStatisticsService statistics, RealEstateDbContext data)
+        public HomeController(IPropertyService properties, IStatisticsService statistics)
         {
-            this.data = data;
+            this.properties = properties;
             this.statistics = statistics;
         }
         public IActionResult Index() 
         {
 
-            var allProperties = this.data
-                                   .Properties
-                                   .OrderByDescending(p => p.Id)
-                                   .Select(x => new PropertyIndexViewModel
-                                   {
-                                       District = x.District.Name,
-                                       PropertyType = x.PropertyType.Name,
-                                       Price = x.Price,
-                                       Images = x.PropertyImages
-                                                               .Select(i => i.Image.Content)
-                                                               .ToList()
-                                    
-                                   })
-                                   .Take(3)
-                                   .ToList();
+            var latestProperties = this.properties.Latest();
 
             var totalStatistics = this.statistics.Total();
 
-            return View( new IndexViewModel 
+            return View(new IndexViewModel
             {
                 TotalProperties = totalStatistics.TotalProperties,
                 TotalUsers = totalStatistics.TotalUsers,
-                Properties = allProperties
+                Properties = latestProperties
             });
 
 
         }
 
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+       
+        public IActionResult Error() => View();
 
     }
 }

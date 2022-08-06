@@ -1,4 +1,5 @@
-﻿using BulgarianRealEstate.Models.Properties;
+﻿using BulgarianRealEstate.Models.Home;
+using BulgarianRealEstate.Models.Properties;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,8 @@ namespace BulgarianRealEstate.Services.Properties
                 int price,
                 string description,
                 List<IFormFile> images);
+
+        List<LatestPropertiesServiceModel> Latest();
 
         PropertyDetailsServiceModel Details(int propertyId);
 

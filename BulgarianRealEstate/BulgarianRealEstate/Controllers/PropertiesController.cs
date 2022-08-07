@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static BulgarianRealEstate.WebConstants;
 
 namespace BulgarianRealEstate.Controllers
 {
@@ -136,6 +137,8 @@ namespace BulgarianRealEstate.Controllers
                 dealerId,
                 images);
 
+            TempData[GlobalMessageKey] = "Your property was added!";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -232,7 +235,7 @@ namespace BulgarianRealEstate.Controllers
                 property.Description,
                 images);
 
-          
+            TempData[GlobalMessageKey] = "Your property was edited!";
 
             return RedirectToAction(nameof(All));
         }

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static BulgarianRealEstate.WebConstants;
 
 namespace BulgarianRealEstate.Controllers
 {
@@ -53,6 +54,8 @@ namespace BulgarianRealEstate.Controllers
 
             this.data.Dealers.Add(dealerData);
             this.data.SaveChanges();
+
+            TempData[GlobalMessageKey] = "Thank you for becomming a dealer!";
 
             return RedirectToAction("All", "Properties");
         }

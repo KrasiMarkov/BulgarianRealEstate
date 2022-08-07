@@ -5,6 +5,7 @@ using BulgarianRealEstate.Models.Properties;
 using BulgarianRealEstate.Services.Properties;
 using BulgarianRealEstate.Services.Statistics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -18,27 +19,31 @@ namespace BulgarianRealEstate.Controllers
     {
 
         private readonly IPropertyService properties;
-        private readonly IStatisticsService statistics;
+        private readonly IMemoryCache cache;
 
-        public HomeController(IPropertyService properties, IStatisticsService statistics)
+        public HomeController(IPropertyService properties, IMemoryCache cache)
         {
             this.properties = properties;
-            this.statistics = statistics;
+            this.cache = cache;
         }
         public IActionResult Index() 
         {
+            const string latestPropertiesCacheKey = "LatestPropertiesCacheKey";
 
-            var latestProperties = this.properties.Latest();
+            var latestProperties = this.cache.Get<List<LatestPropertiesServiceModel>>(latestPropertiesCacheKey);
 
-            var totalStatistics = this.statistics.Total();
-
-            return View(new IndexViewModel
+            if (latestProperties == null) 
             {
-                TotalProperties = totalStatistics.TotalProperties,
-                TotalUsers = totalStatistics.TotalUsers,
-                Properties = latestProperties
-            });
+                latestProperties = this.properties
+                                       .Latest();
 
+                var chacheOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));
+
+                this.cache.Set(latestPropertiesCacheKey, latestProperties, chacheOptions);
+            }
+
+            return View(latestProperties);
 
         }
 

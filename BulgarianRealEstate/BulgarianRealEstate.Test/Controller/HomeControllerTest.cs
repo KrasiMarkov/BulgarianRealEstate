@@ -5,6 +5,7 @@ using BulgarianRealEstate.Services.Properties;
 using BulgarianRealEstate.Services.Statistics;
 using BulgarianRealEstate.Test.Mocks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +34,9 @@ namespace BulgarianRealEstate.Test.Controller
             data.SaveChanges();
 
             var propertyService = new PropertyService(data);
-            var statisticsService = new StatisticsService(data);
+            
 
-            var homeController = new HomeController(propertyService, statisticsService);
+            var homeController = new HomeController(propertyService, null);
 
             //Act
 

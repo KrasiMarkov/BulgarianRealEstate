@@ -18,7 +18,7 @@
                     <p class="card-text">@item.PropertyTypeName</p>
                     <p class="card-text">@item.DistrictName</p>
                     <p class="card-text">@item.Description</p>
-                    <a asp-controller="Properties" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">View</a>
+                    <a asp-controller="Properties" asp-action="Details" asp-route-id="@item.Id" asp-route-information="@item.GetInformation()" class="btn btn-primary">View</a>
                     @if (ViewBag.AllowPropertyEdit == true || User.IsAdmin())
                     {
                         <a asp-controller="Properties" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>

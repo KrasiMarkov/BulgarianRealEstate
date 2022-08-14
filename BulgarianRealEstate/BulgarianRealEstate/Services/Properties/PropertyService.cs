@@ -360,8 +360,12 @@ namespace BulgarianRealEstate.Services.Properties
                                    .OrderByDescending(p => p.Id)
                                    .Select(x => new LatestPropertiesServiceModel
                                    {
-                                       District = x.District.Name,
-                                       PropertyType = x.PropertyType.Name,
+                                       Id = x.Id,
+                                       Size = x.Size,
+                                       Year = x.Year,
+                                       DistrictName = x.District.Name,
+                                       PropertyTypeName = x.PropertyType.Name,
+                                       BuildingTypeName = x.BuildingType.Name,
                                        Price = x.Price,
                                        Images = x.PropertyImages
                                                                .Select(i => i.Image.Content)

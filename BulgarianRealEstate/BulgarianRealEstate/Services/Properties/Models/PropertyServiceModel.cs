@@ -1,11 +1,12 @@
-﻿using System;
+﻿using BulgarianRealEstate.Services.Properties.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BulgarianRealEstate.Services.Properties
 {
-    public class PropertyServiceModel
+    public class PropertyServiceModel : IPropertyModel
     {
         public int Id { get; init; }
 

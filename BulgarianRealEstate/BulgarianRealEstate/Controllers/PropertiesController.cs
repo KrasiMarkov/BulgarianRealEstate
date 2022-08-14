@@ -151,6 +151,18 @@ namespace BulgarianRealEstate.Controllers
             return View(myProperties);
         }
 
+        public IActionResult Details(int id, string information)
+        {
+            var property = this.properties.Details(id);
+
+            if (information != property.GetInformation()) 
+            {
+                return BadRequest();
+            }
+
+            return View(property);
+        }
+
         [Authorize]
         public IActionResult Edit(int id)
         {

@@ -82,6 +82,12 @@ namespace BulgarianRealEstate
                .UseEndpoints(endpoints =>
                {
                    endpoints.MapDefaultAreaRoute();
+
+                   endpoints.MapControllerRoute(
+                       name: "Property Details",
+                       pattern: "/Properties/Details/{id}/{information}",
+                       defaults: new { controller = "Properties", action = "Details" });
+
                    endpoints.MapDefaultControllerRoute();
                    endpoints.MapRazorPages();
                });

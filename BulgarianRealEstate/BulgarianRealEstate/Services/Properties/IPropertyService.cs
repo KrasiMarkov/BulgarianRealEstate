@@ -11,20 +11,22 @@ namespace BulgarianRealEstate.Services.Properties
     public interface IPropertyService
     {
         PropertyQueryServiceModel All(
-            string keyword,
-            int districtId,
-            int buildingTypeId,
-            int propertyTypeId,
-            int minPrice,
-            int maxPrice,
-            int minSize,
-            int maxSize,
-            int minYear,
-            int maxYear,
-            int minFloor,
-            int maxFloor,
-            int currentPage,
-            int propertiesPerPage);
+            string keyword = null,
+            int districtId = 0,
+            int buildingTypeId = 0,
+            int propertyTypeId = 0,
+            int minPrice = 0,
+            int maxPrice = 0,
+            int minSize = 0,
+            int maxSize = 0,
+            int minYear = 0,
+            int maxYear = 0,
+            int minFloor = 0,
+            int maxFloor = 0,
+            int currentPage = 1,
+            int propertiesPerPage = int.MaxValue,
+            bool publicOnly = true);
+
 
 
         IEnumerable<PropertyServiceModel> ByUsers(string userId);
@@ -36,6 +38,9 @@ namespace BulgarianRealEstate.Services.Properties
         bool DistrictExists(int districtId);
 
         bool BuildingTypeExists(int buildingTypeId);
+
+
+        void ChangeVisibility(int id);
 
         int Create( int size,
                 int floor,

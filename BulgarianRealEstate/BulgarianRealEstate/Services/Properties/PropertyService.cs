@@ -22,22 +22,24 @@ namespace BulgarianRealEstate.Services.Properties
         }
 
         public PropertyQueryServiceModel All(
-            string keyword,
-            int districtId,
-            int buildingTypeId,
-            int propertyTypeId,
-            int minPrice,
-            int maxPrice,
-            int minSize,
-            int maxSize,
-            int minYear,
-            int maxYear,
-            int minFloor,
-            int maxFloor,
-            int currentPage,
-            int propertiesPerPage)
+            string keyword = null, 
+            int districtId = 0, 
+            int buildingTypeId = 0, 
+            int propertyTypeId = 0, 
+            int minPrice = 0, 
+            int maxPrice = 0, 
+            int minSize = 0, 
+            int maxSize = 0, 
+            int minYear = 0, 
+            int maxYear = 0, 
+            int minFloor = 0, 
+            int maxFloor = 0, 
+            int currentPage = 1, 
+            int propertiesPerPage = int.MaxValue, 
+            bool publicOnly = true)
         {
-            var propertiesQuery = this.data.Properties.AsQueryable();
+
+            var propertiesQuery = this.data.Properties.Where(p => !publicOnly || p.IsPublic);
 
 
 
@@ -180,8 +182,16 @@ namespace BulgarianRealEstate.Services.Properties
                 })
                 .ToList();
 
-      
-        
+
+        public void ChangeVisibility(int id)
+        {
+            var property = this.data.Properties.Find(id);
+
+            property.IsPublic = !property.IsPublic;
+
+            this.data.SaveChanges();
+        }
+
 
         private IEnumerable<PropertyServiceModel> GetProperties(IQueryable<Property> propertyQuery)
         => propertyQuery
@@ -197,7 +207,9 @@ namespace BulgarianRealEstate.Services.Properties
                              BuildingTypeName = x.BuildingType.Name,
                              Price = x.Price,
                              Description = x.Description,
+                             IsPublic = x.IsPublic,
                              Images = x.PropertyImages
+                             
                                                                 .Select(i => i.Image.Content)
                                                                 .ToList()
 
@@ -207,7 +219,8 @@ namespace BulgarianRealEstate.Services.Properties
             int size, 
             int floor, 
             int totalNumberOfFloor, 
-            int year, int districtId, 
+            int year, 
+            int districtId, 
             int propertyTypeId, 
             int buildingTypeId, 
             int price, 
@@ -227,7 +240,8 @@ namespace BulgarianRealEstate.Services.Properties
                 BuildingTypeId = buildingTypeId,
                 Price = price,
                 Description = description,
-                DealerId = dealerId
+                DealerId = dealerId,
+                IsPublic = false
 
             };
 
@@ -318,6 +332,7 @@ namespace BulgarianRealEstate.Services.Properties
             propertyData.BuildingTypeId = buildingTypeId;
             propertyData.Price = price;
             propertyData.Description = description;
+            propertyData.IsPublic = false;
 
 
             foreach (var image in images)
@@ -357,6 +372,7 @@ namespace BulgarianRealEstate.Services.Properties
         {
             var latestProperties = this.data
                                    .Properties
+                                   .Where(p => p.IsPublic)
                                    .OrderByDescending(p => p.Id)
                                    .Select(x => new LatestPropertiesServiceModel
                                    {
@@ -377,5 +393,7 @@ namespace BulgarianRealEstate.Services.Properties
 
             return latestProperties;
         }
+
+        
     }
 }

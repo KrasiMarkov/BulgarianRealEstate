@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BulgarianRealEstate.Services.Properties.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using static BulgarianRealEstate.Data.DataConstants.Property;
 
 namespace BulgarianRealEstate.Models.Properties
 {
-    public class PropertyFormModel
+    public class PropertyFormModel : IPropertyModel
     {
         [Range(SizeMinValue, SizeMaxValue)]
         public int Size { get; init; }
@@ -47,5 +48,11 @@ namespace BulgarianRealEstate.Models.Properties
 
 
         public List<byte[]> Images { get; set; }
+
+        public string BuildingTypeName { get; }
+
+        public string DistrictName { get; }
+
+        public string PropertyTypeName { get; }
     }
 }

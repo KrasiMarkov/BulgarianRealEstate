@@ -124,7 +124,7 @@ namespace BulgarianRealEstate.Controllers
                 return View(property);
             }
 
-            this.properties.Create(
+            var propertyId = this.properties.Create(
                 property.Size,
                 property.Floor,
                 property.TotalNumberOfFloor,
@@ -137,9 +137,9 @@ namespace BulgarianRealEstate.Controllers
                 dealerId,
                 images);
 
-            TempData[GlobalMessageKey] = "Your property was added!";
+            TempData[GlobalMessageKey] = "Your property was added and is awaiting approval!";
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details), new { id = propertyId, information = property.GetInformation()});
         }
 
         [Authorize]
@@ -247,9 +247,9 @@ namespace BulgarianRealEstate.Controllers
                 property.Description,
                 images);
 
-            TempData[GlobalMessageKey] = "Your property was edited!";
+            TempData[GlobalMessageKey] = $"Your property was edited {(this.User.IsAdmin() ? string.Empty : " and is awaiting approval")}!";
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details), new { id, information = property.GetInformation() });
         }
 
     }

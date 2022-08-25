@@ -47,6 +47,8 @@ namespace BulgarianRealEstate.Data.Models
         [MaxLength(DescriptionMaxLength)]
         public string Description { get; set; }
 
+        public bool IsPublic { get; set; }
+
         public ICollection<PropertyImage> PropertyImages { get; set; } = new List<PropertyImage>();
 
     }

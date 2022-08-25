@@ -23,10 +23,16 @@
             </li>
         }
 
-        else if(!userIsAdmin)
+        else if (!userIsAdmin)
         {
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Dealers" asp-action="Become">Become Dealer</a>
+            </li>
+        }
+        else if (userIsAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Properties" asp-action="All">Administration</a>
             </li>
         }
 

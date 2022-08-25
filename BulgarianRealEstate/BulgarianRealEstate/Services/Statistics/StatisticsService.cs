@@ -16,7 +16,7 @@ namespace BulgarianRealEstate.Services.Statistics
 
         public StatisticsServiceModel Total()
         {
-            var totalProperties = this.data.Properties.Count();
+            var totalProperties = this.data.Properties.Count(p => p.IsPublic);
             var totalUsers = this.data.Users.Count();
 
             return new StatisticsServiceModel

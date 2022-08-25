@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using BulgarianRealEstate.Services.Dealers;
+using BulgarianRealEstate.Services.Properties;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +11,29 @@ namespace BulgarianRealEstate.Areas.Admin.Controllers
 {
     public class PropertiesController : AdminController
     {
-        public IActionResult Index() 
+        private readonly IPropertyService properties;
+        
+
+        public PropertiesController(IPropertyService properties)
         {
-            return View();
+
+            this.properties = properties;
+            
         }
 
+
+        public IActionResult All() 
+        {
+            var properties = this.properties.All(publicOnly: false).Properties;
+             
+            return View(properties);
+        }
+
+        public IActionResult ChangeVisibility(int id) 
+        {
+            this.properties.ChangeVisibility(id);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

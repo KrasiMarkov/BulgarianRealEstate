@@ -14,14 +14,18 @@ namespace BulgarianRealEstate.Services.Properties
 
         public int Floor { get; init; }
 
+       
         public int TotalNumberOfFloor { get; init; }
 
         public int Year { get; init; }
 
+        
         public string DistrictName { get; init; }
 
+        
         public string PropertyTypeName { get; init; }
 
+       
         public string BuildingTypeName { get; init; }
 
         public int Price { get; init; }
@@ -29,6 +33,8 @@ namespace BulgarianRealEstate.Services.Properties
         public List<byte[]> Images { get; set; }
 
         public string Description { get; init; }
+
+        public bool IsPublic { get; set; }
 
     }
 }

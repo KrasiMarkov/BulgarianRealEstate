@@ -1,0 +1,49 @@
+﻿@model IEnumerable<PropertyServiceModel>
+
+@{
+    ViewBag.Title = "Become Seller";
+}
+
+<h1>All Properties</h1>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Size</th>
+            <th scope="col">Floor</th>
+            <th scope="col">TotalNumberOfFloor</th>
+            <th scope="col">Year</th>
+            <th scope="col">DistrictName</th>
+            <th scope="col">PropertyTypeName</th>
+            <th scope="col">BuildingTypeName</th>
+            <th scope="col">Price</th>
+            <th scope="col">Approved</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var property in Model)
+        {
+        <tr>
+            <td scope="col">@property.Id</td>
+            <td scope="col">@property.Size</td>
+            <td scope="col">@property.Floor</td>
+            <td scope="col">@property.TotalNumberOfFloor</td>
+            <td scope="col">@property.Year</td>
+            <td scope="col">@property.DistrictName</td>
+            <td scope="col">@property.PropertyTypeName</td>
+            <td scope="col">@property.BuildingTypeName</td>
+            <td scope="col">@property.Price</td> 
+            <td scope="col">@(property.IsPublic ? "Yes" : "No")</td>
+            <td scope="col">
+                <a asp-area="" asp-controller="Properties" asp-action="Details" asp-route-id="@property.Id" asp-route-information="@property.GetInformation()" class="btn btn-primary float-right ml-3">View</a>
+                <a asp-area="" asp-controller="Properties" asp-action="Edit" asp-route-id="@property.Id" class="btn btn-warning float-right ml-3">Edit</a>
+                <a asp-area="Admin" asp-controller="Properties" asp-action="ChangeVisibility" asp-route-id="@property.Id" class="btn btn-info float-right ml-3">@(property.IsPublic ? "Hide" : "Show")</a>
+                <a asp-area="" asp-controller="Properties" asp-action="Delete" asp-route-id="@property.Id" class="btn btn-danger float-right ml-3">Delete</a>
+
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

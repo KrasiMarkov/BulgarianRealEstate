@@ -235,7 +235,7 @@ namespace BulgarianRealEstate.Controllers
                 return BadRequest();
             }
 
-            this.properties.Edit(id,
+            var edited = this.properties.Edit(id,
                 property.Size,
                 property.Floor,
                 property.TotalNumberOfFloor,
@@ -246,6 +246,11 @@ namespace BulgarianRealEstate.Controllers
                 property.Price,
                 property.Description,
                 images);
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
 
             TempData[GlobalMessageKey] = $"Your property was edited {(this.User.IsAdmin() ? string.Empty : " and is awaiting approval")}!";
 

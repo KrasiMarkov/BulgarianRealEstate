@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using static BulgarianRealEstate.WebConstants.Cache;
 
 namespace BulgarianRealEstate.Controllers
 {
@@ -28,19 +29,20 @@ namespace BulgarianRealEstate.Controllers
         }
         public IActionResult Index() 
         {
-            const string latestPropertiesCacheKey = "LatestPropertiesCacheKey";
+            
 
-            var latestProperties = this.cache.Get<List<LatestPropertiesServiceModel>>(latestPropertiesCacheKey);
+            var latestProperties = this.cache.Get<List<LatestPropertiesServiceModel>>(LatestPropertiesCacheKey);
 
             if (latestProperties == null) 
             {
                 latestProperties = this.properties
-                                       .Latest();
+                                       .Latest()
+                                       .ToList();
 
                 var chacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));
 
-                this.cache.Set(latestPropertiesCacheKey, latestProperties, chacheOptions);
+                this.cache.Set(LatestPropertiesCacheKey, latestProperties, chacheOptions);
             }
 
             return View(latestProperties);

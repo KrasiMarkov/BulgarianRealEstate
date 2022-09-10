@@ -32,7 +32,7 @@ namespace BulgarianRealEstate.Test.Pipeline
         [Fact]
         public void ErrorShouldReturnView()
             => MyMvc
-                  .Pipeline()
+                  .Pipeline()   
                   .ShouldMap("/Home/Error")
                   .To<HomeController>(c => c.Error())
                   .Which()

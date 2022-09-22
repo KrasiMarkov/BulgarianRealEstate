@@ -257,5 +257,34 @@ namespace BulgarianRealEstate.Controllers
             return RedirectToAction(nameof(Details), new { id, information = property.GetInformation() });
         }
 
+        public IActionResult Delete(int id)
+        {
+            var dealerId = dealers.IdByUser(this.User.GetId());
+
+            if (dealerId == 0 && !User.IsAdmin())
+            {
+                return RedirectToAction(nameof(DealersController.Become), "Dealers");
+            }
+
+            if (!this.properties.IsByDealer(id, dealerId) && !User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            var deletedProperty = this.properties.Delete(id);
+
+            if (!deletedProperty) 
+            {
+                return BadRequest();
+            }
+
+
+            TempData[GlobalMessageKey] = $"Your property was deleted!";
+
+
+            return RedirectToAction(nameof(PropertiesController.Mine), "Properties");
+
+        }
+
     }
 }

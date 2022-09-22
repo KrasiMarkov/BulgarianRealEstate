@@ -394,6 +394,15 @@ namespace BulgarianRealEstate.Services.Properties
             return latestProperties;
         }
 
-        
+        public bool Delete(int propertyId)
+        {
+            var property = this.data.Properties.Find(propertyId);
+
+            this.data.Properties.Remove(property);
+
+            this.data.SaveChanges();
+
+            return true;
+        }
     }
 }

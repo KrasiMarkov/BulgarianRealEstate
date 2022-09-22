@@ -66,6 +66,8 @@ namespace BulgarianRealEstate.Services.Properties
                 string description,
                 List<IFormFile> images);
 
+        bool Delete(int propertyId);
+
         List<LatestPropertiesServiceModel> Latest();
 
         PropertyDetailsServiceModel Details(int propertyId);
